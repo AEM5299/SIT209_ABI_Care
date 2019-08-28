@@ -1,12 +1,13 @@
 {
-  "name": "abi-care-webapp",
+  "name": "web",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
-  "author": "Abood, Brian, Idhant",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
