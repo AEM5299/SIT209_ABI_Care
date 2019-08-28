@@ -12,10 +12,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.listen(port, () => {
-    console.log(`listening on port ${port}`);
-});
-
 app.get('/login', (req, res) => {
     res.sendFile(`${base}/login.html`);
 });
@@ -32,3 +28,6 @@ app.get('*', (req, res) => {
     res.sendFile(`${base}/404.html`);
 });
 
+app.listen(port, () => {
+    console.log(`listening on port ${port}`);
+});
