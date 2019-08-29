@@ -5,9 +5,24 @@
         <ul>
             <li><a href="#">Devices</a></li>
             <li><a href="#">Doctors</a></li>
-            <li><a href="/history">History</a></li>
+            <li><a href="#">History</a></li>
             <li><a href="#">Medical</a></li>
-            <li><a href="#">Logout</a></li>
+            <li><a id="auth" href="#"></a></li>
         </ul>
     </nav>
 </div>
+
+<script>
+        const isAuthenticated = localStorage.getItem('token');
+        var element = document.getElementById('auth');
+        if(isAuthenticated) {
+            element.innerHTML = 'Logout';
+            element.onclick = (event) => {
+                localStorage.removeItem('token');
+                location.href = '/login';
+            }
+        } else {
+            element.innerHTML = 'Login';
+            element.href = '/login';
+        }
+</script>
