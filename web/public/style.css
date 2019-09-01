@@ -128,8 +128,9 @@
 /* Creates a fluid smooth background */
 html { 
     width: 100%; 
-    height:100%; 
-    overflow:hidden; 
+    height: 100%; 
+    margin: auto;
+    scroll-behavior: smooth;
 }
 
 body { 
@@ -275,4 +276,52 @@ table {
     color: white;
     font-size: 150%;
 }
+
+h1.home1 {
+    margin-top: 8%;
+    color: white;
+    text-align: center;
+    font-size: 250%;
+    margin-bottom: 0%;
+    cursor: default;
+    margin-left: 0;
+}
+
+h1.home2 {
+    margin-top: 4%;
+    color: white;
+    text-align: center;
+    font-size: 900%;
+    cursor: default;
+    letter-spacing: 0px;
+    margin-bottom: 0%;
+}
+
+h1.home3 {
+    margin-top: 0%;
+    color: white;
+    text-align: center;
+    font-size: 500%;
+    margin-bottom: 0%;
+    cursor: default;
+    margin-left: 0;
+    line-height: 10px;
+}
+
+h1.home2 span {
+    display: inline-flex;
+    color: white;
+}
+
+h1.home2 span:nth-child(even) {
+    overflow: hidden;
+    transition: ease-in-out 0.5s;
+    color: orange;
+    letter-spacing: -1em;
+}
+
+h1.home2:hover span:nth-child(even) {
+    letter-spacing: 0px;
+}
+
 
