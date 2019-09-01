@@ -3,7 +3,7 @@ $('#navbar').load('navbar.html');
 
 const token = localStorage.getItem('token');
 // Stores the api url hosted using now
-const API_URL = "http://localhost:5001/api";
+const API_URL = "http://localhost:5000/api";
 // Stores the mqtt url hosted using now
 //const MQTT_URL = "";
 
@@ -70,7 +70,7 @@ $('#login').on('click', () => {
             {
                 console.log(response);
                 localStorage.setItem('token', response.token);
-                location.href = '/login';
+                location.href = '/home';
             }
             else {
                 console.log('error')
