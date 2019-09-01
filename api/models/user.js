@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports = mongoose.model('User', new mongoose.Schema(
     {
-        user: 
+        name: 
         {
             type: String,
             required: true
@@ -20,7 +20,8 @@ module.exports = mongoose.model('User', new mongoose.Schema(
         usertype: 
         {
             type: String,
-            required: true
+            required: false,
+            default: 'patient'
         },
         date: 
         {
