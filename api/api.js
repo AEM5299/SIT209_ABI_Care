@@ -1,23 +1,18 @@
-// Calling node package mongoose which is used to communicate with a remote MongoDB
 const mongoose = require('mongoose');
-// Calling node package express
 const express = require('express');
-// Calling user schema model
+// Importing our models
 const User = require('./models/user');
 const Device = require('./models/device');
-// Calling bcrypt to encrpyt and decrypt the password in the MongoDB
+// Importing what we use for encryption and authentication
 const bcrypt = require('bcrypt');
-// Calling the local strategy for authentication
 const LocalStrategy = require('passport-local').Strategy;
-// Calling passport required for authentication
 const passport = require('passport');
-// Calling body parser
 const bodyParser = require('body-parser');
-const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const passportJWT = require("passport-jwt");
 const JWTStrategy   = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+
 // Connecting to mongoDB
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 // Creating an instance of express() named app
@@ -26,7 +21,7 @@ const app = express();
 // Middleware for bodyparser
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-// Middleware for passport
+// Initializing passport
 app.use(passport.initialize());
 
 app.use(function(req, res, next) {
@@ -139,8 +134,6 @@ app.post('/api/registration', (req, res) => {
     });
 });
 
-//
-
 app.post('/api/authenticate', (req, res, next) => {
     const { email, password } = req.body;
     passport.authenticate('local', {session: false}, (err, user, info) => {
@@ -173,23 +166,11 @@ app.post('/api/device', (req, res) => {
     })
 })
 
-app.get('/api/FakeDeviceData/:deviceid', passport.authenticate('jwt', {session: false}) , (req, res) => {
-    const { deviceid } = req.params;
-    Device.findById(deviceid, (err, device) => {
-        if(err) return res.send("Failed");
-        if(!device) return res.send("Device not found");
-        if(device.owner != req.user.id) res.status(401).send('Unauthorized');
-        const object = {date: faker.date.past(), bloodPressure: faker.random.number(500)};
-        device.data.push(object);
-        device.save()
-        return res.send(device);
-    });
-});
-
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
 })
 // api end points end
+
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
