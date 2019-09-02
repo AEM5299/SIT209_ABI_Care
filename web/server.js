@@ -22,6 +22,18 @@ app.get('/history', (req, res) => {
     res.sendFile(`${base}/history.html`);
 });
 
+app.get('/devices', (req, res) => {
+    res.sendFile(`${base}/devices.html`);
+});
+
+app.get('/deviceadd', (req, res) => {
+    res.sendFile(`${base}/device_add.html`);
+});
+
+app.get('/home', (req, res) => {
+    res.sendFile(`${base}/homepage.html`);
+});
+
 app.get('*', (req, res) => {
     res.sendFile(`${base}/404.html`);
 });

@@ -26,7 +26,7 @@ app.use(passport.initialize());
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept Access-Control-Allow-Headers, Authorization, X-Requested-With");
     next();
 });
 
@@ -39,7 +39,7 @@ passport.use(
         User.findOne({email: email})
             .then(user => {
                 if(!user){
-                    return done(null, false, { message: 'Wrong Credentials'}); 
+                    return done(null, false, { message: 'Wrong Credentials'});
                 }
 
                 // Matching the password
@@ -80,7 +80,7 @@ passport.use(new JWTStrategy({
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
-  
+
 passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
       done(err, user);
@@ -102,14 +102,14 @@ app.post('/api/registration', (req, res) => {
                 return res.status(400).send("This email is already registered");
             }
         }
-        else 
+        else
         {
             const newUser = new User({
                 name,
                 email,
                 password
             });
-            
+
             // Hashing Password in mongoDB
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt , (err, hash) => {
@@ -120,13 +120,13 @@ app.post('/api/registration', (req, res) => {
                     // Saving the user
                     newUser.save(err => {
                         return err
-                            ? res.send(err)
+                            ? res.status(500).send(err)
                             : res.json({
                                 success: true,
                                 message: 'Created new user'
                             });
                     });
-                    
+
                 })
             })
             console.log("Registered a new user");
@@ -135,7 +135,6 @@ app.post('/api/registration', (req, res) => {
 });
 
 app.post('/api/authenticate', (req, res, next) => {
-    const { email, password } = req.body;
     passport.authenticate('local', {session: false}, (err, user, info) => {
         if (err || !user) {
             return res.status(400).json({
@@ -148,23 +147,62 @@ app.post('/api/authenticate', (req, res, next) => {
                res.send(err);
            }
            const payload = {id: user._id, email: user.email};
-           const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5m' });
+           const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
            return res.json({success: true, token});
         });
     })(req, res, next);
 
 });
 
-app.post('/api/device', (req, res) => {
-    const {owner, name} = req.body;
-    User.findById(owner, (err, user) => {
-        if(err) return res.send('failed');
+app.get('/api/devices', passport.authenticate('jwt'), (req, res) => {
+    Device.find({owner: req.user.id})
+        .then(devices => {
+            return res.send(devices);
+        })
+        .catch(err => {
+            return res.send(err);
+        })
+
+});
+
+
+app.post('/api/devices', passport.authenticate('jwt'), (req, res) => {
+    const {name, type} = req.body;
+    User.findById(req.user.id)
+    .then(user => {
         if(!user) return res.send('failed');
-        const device = new Device({name: name, owner: owner});
-        device.save();
-        res.send(device);
+        const newDevice = new Device({
+            name: name,
+            type: type,
+            owner: req.user.id
+        });
+        newDevice.save(err => {
+            return err
+                ? res.send(err)
+                : res.json({
+                    newDevice: newDevice,
+                    success: true
+                });
+        });
     })
-})
+    .catch(err => {
+        return res.send('failed');
+    });
+
+});
+
+app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
+    const { deviceId } = req.params;
+    Device.findById(deviceId)
+        .then(device => {
+            if(!device || toString(device.owner) !== toString(req.user.id)) return res.status(400).send('Unknown Device')
+            if(toString(device.owner) == toString(req.user.id)) return res.json(device);
+        })
+        .catch(err => {
+            return res.send(err);
+        })
+
+});
 
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
@@ -174,5 +212,3 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
-
-  
