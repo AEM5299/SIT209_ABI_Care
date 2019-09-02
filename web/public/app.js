@@ -78,7 +78,18 @@ $('#login').on('click', () => {
             }
         })
         .catch((err) => {
+
+
             console.log(err.responseJSON.message);
+
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+                footer: '<a href>Why do I have this issue?</a>'
+            })
+
+
             $('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
         });
     }
