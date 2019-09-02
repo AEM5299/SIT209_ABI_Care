@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,600');
+body {
+	margin: 0;
+	font-family: 'Work Sans', sans-serif;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.container {
+	width: 80%;
+  margin: 0 auto;
+  text-decoration: none;
+}
+
+
+header::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.logo {
+  float: left;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+}
+
+.logo a{
+  color: white;
+  text-decoration: none;
+}
+
+.logo:hover a {
+  color: orange;
+  text-decoration: none;
+}
+
+.logo:hover {
+  cursor: pointer;
+  color: orange;
+}
+
+nav {
+  float: right;
+  text-decoration: none;
+}
+
+nav ul {
+  margin: 0;
+  padding: 10px;
+  list-style: none;
+  text-decoration: none;
+}
+
+nav li {
+  display: inline-block;
+  margin-left: 50px;
+  padding-top: 20px;
+  text-decoration: none;
+  position: relative;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+nav a:hover {
+  color: orange;
+  text-decoration: none;
+}
+
+nav a::before {
+  content: '';
+  display: block;
+  height: 5px;
+  background-color: orange;
+  text-decoration: none;
+  position: absolute;
+  top: 0;
+  width: 0%;
+
+  transition: all ease-in-out 250ms;
+}
+
+nav a:hover::before {
+  width: 100%;
+  text-decoration: none;
+}
