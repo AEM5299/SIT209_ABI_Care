@@ -23,11 +23,23 @@ $('#register').on('click', function ()
     if(password != confirmpassword)
     {
         $('#message').append(`<p class="alert alert-danger"> Passwords do not match </p>`);
+        
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Password do not match',
+        })
         console.log("Passwords do not match");
     }
     if(password.length <= 6)
     {
         $('#message').append(`<p class="alert alert-danger"> Password should be more than 6 characters </p>`);
+        
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Password needs to be at least 6 characters',
+        })
         console.log("Password length is less than 6 characters");
     }
     if (password == confirmpassword)
@@ -44,6 +56,12 @@ $('#register').on('click', function ()
         })
         .catch(err => {
             $('#message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
+            
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: `${err.responseJSON.message}`,
+            })
             console.log(err.responseJSON.message);
         });
     }
@@ -85,8 +103,8 @@ $('#login').on('click', () => {
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: 'Password is wrong!'
-            })
+                text: 'Wrong credentials!',
+              })
 
 
             $('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
