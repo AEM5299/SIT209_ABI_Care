@@ -3,11 +3,13 @@ body {
 	margin: 0;
 	font-family: 'Work Sans', sans-serif;
   font-weight: 800;
+  text-decoration: none;
 }
 
 .container {
 	width: 80%;
-	margin: 0 auto;
+  margin: 0 auto;
+  text-decoration: none;
 }
 
 
@@ -41,19 +43,21 @@ header::after {
 
 nav {
   float: right;
+  text-decoration: none;
 }
 
 nav ul {
   margin: 0;
   padding: 10px;
   list-style: none;
+  text-decoration: none;
 }
 
 nav li {
   display: inline-block;
   margin-left: 50px;
   padding-top: 20px;
-
+  text-decoration: none;
   position: relative;
 }
 
@@ -66,6 +70,7 @@ nav a {
 
 nav a:hover {
   color: orange;
+  text-decoration: none;
 }
 
 nav a::before {
@@ -73,7 +78,7 @@ nav a::before {
   display: block;
   height: 5px;
   background-color: orange;
-
+  text-decoration: none;
   position: absolute;
   top: 0;
   width: 0%;
@@ -83,4 +88,5 @@ nav a::before {
 
 nav a:hover::before {
   width: 100%;
+  text-decoration: none;
 }
