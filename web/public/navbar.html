@@ -2,7 +2,7 @@
 <div class="container">
     <h1 class="logo"><a href="/home">ABI CARE</a></h1>
     <nav>
-        <ul>
+        <ulz>
             <li><a href="/devices">Devices</a></li>
             <li><a href="#">Doctors</a></li>
             <li><a href="#">History</a></li>
@@ -13,12 +13,12 @@
 </div>
 
 <script>
-        const isAuthenticated = localStorage.getItem('token');
+        const isAuthenticated = sessionStorage.getItem('token');
         var element = document.getElementById('auth');
         if(isAuthenticated) {
             element.innerHTML = 'Logout';
             element.onclick = (event) => {
-                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
                 location.href = '/login';
             }
         } else {
