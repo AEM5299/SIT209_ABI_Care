@@ -28,10 +28,8 @@ module.exports = mongoose.model('User', new mongoose.Schema(
             type: String,
             default: Date.now
         },
-        markers:
+        loc:
         {
-            type: [{}],
-            required: false,
-            default: '{coords:{lat: -37.8136, lng: 144.9631},content:"<h1>Melbourne CBD</h1>"}'
+            
         }
     }));

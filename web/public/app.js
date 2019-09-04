@@ -122,23 +122,7 @@ function getDeviceData(e) {
         },
         success: function(response) {
             console.log(response);
-            // On clicking a device its details are shown using modal 
-            $('#historyHead').append(`
-                <tr>
-                    <th>Date</th>
-                    <th>Reading</th>
-                </tr>
-            `);
-            response.data.map(response => {
-                $('#historyBody').append(`
-                    <tr>
-                        <td>${response.name}</td>
-                        <td>${response.type}</td>
-                        <td>${response.data.date}</td>
-                    </tr>
-                `);
-            });
-            $('#historyModal').modal('show');
+            showDeviceDataModal(response);
         },
         error: function(err) {
             if(err.status == 401) {
@@ -185,6 +169,27 @@ function showAddDeviceform(el) {
     const type = el.getAttribute('data-type');
     document.getElementById("typeField").value = type;
     $('#addDeviceModal').modal('show');
+}
+
+function showDeviceDataModal(response)
+{
+    $('#showDeviceModal').modal('show');
+    // On clicking a device its details are shown using modal 
+    $('#historyHead').append(`
+        <tr>
+            <th>Date</th>
+            <th>Reading</th>
+        </tr>
+    `);
+    response.data.map(response => {
+        $('#historyBody').append(`
+            <tr>
+                <td>${response.name}</td>
+                <td>${response.type}</td>
+                <td>${response.data.date}</td>
+            </tr>
+        `);
+    });      
 }
 
 $("#addDeviceForm").submit(function(event) {
