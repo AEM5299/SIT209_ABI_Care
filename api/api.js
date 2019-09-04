@@ -165,7 +165,6 @@ app.get('/api/devices', passport.authenticate('jwt'), (req, res) => {
 
 });
 
-
 app.post('/api/devices', passport.authenticate('jwt'), (req, res) => {
     const {name, type} = req.body;
     User.findById(req.user.id)
@@ -204,11 +203,22 @@ app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
 
 });
 
+app.get('/api/users', passport.authenticate('jwt'), (req,res) => {
+    User.find({usertype: 'doctor'})
+        .then(users => {
+            return res.send(users);
+        })
+        .catch(err => {
+            return res.send(err);
+        })
+});
+
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
 })
 // api end points end
 
 app.listen(port, () => {
+    console.log(`connected to mongoDBURL = ${process.env.MONGO_URL}`);
     console.log(`listening on port ${port}`);
 });

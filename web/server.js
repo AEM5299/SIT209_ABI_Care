@@ -30,6 +30,10 @@ app.get('/deviceadd', (req, res) => {
     res.sendFile(`${base}/device_add.html`);
 });
 
+app.get('/doctors', (req, res) => {
+    res.sendFile(`${base}/doctors.html`);
+});
+
 app.get('/home', (req, res) => {
     res.sendFile(`${base}/homepage.html`);
 });
@@ -40,4 +44,5 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
+    
 });

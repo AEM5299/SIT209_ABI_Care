@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="Homepage for ABI Care application" />
+        <meta name="author" content="Abood, Brian, Idhant" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ABI Care</title>
+        <!--the use of defer tag allows us to place the scripts cleanly in the head tag and also making sure that parsing of scripts doesn`t stop the website from loading-->
+        <!--Adding the script for jquery which is use by app.js and bootstrap, hence added first in sequence-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" defer></script>
+        <!--Adding the script for app.js-->
+        <script type="text/javascript" src="app.js" defer></script>
+        <!--Adding the script for popper libraries which is used by bootstrap, hence added before bootstrap-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" defer></script>
+        <!--Adding the script for popper libraries which is used by bootstrap-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" defer ></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCzkSvjSw3mfS7JX2zMD3sQ_r8Pwy3VU0&callback=initMap"></script>
+        <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="stylemap.css" />
+    </head>
+
+     <header>
+        <div class="container">
+            <div id="navbar"></div>
+            <div id="footer"></div>
+        </div>
+    </header>
+
+    <body>
+        <div class="login3">
+            <h1 style="cursor: default">Your Doctors</h1>
+        </div>
+        <div id="map" class="map"></div>
+        <script>
+           function initMap(){
+            // Map options
+            var options = {
+                zoom:10,
+                center:{lat: -37.8136, lng: 144.9631}
+            }
+
+            // New map
+            var map = new google.maps.Map(document.getElementById('map'), options);
+
+            // Array of markers
+            var markers = [
+                {
+                coords:{lat:-37.884169,lng: 145.015448},
+                content:'<h1>Caufield Hospital</h1>'
+                },
+                {
+                coords:{lat:-37.812206,lng:144.984226},
+                content:'<h1>St Vincents Private Hospital</h1>'
+                },
+                {
+                coords:{lat:-37.778934,lng:144.946892} ,
+                content:'<h1>The Royal Melbourne Hospital</h1>' 
+                }
+            ];
+
+            // Loop through markers
+            for(var i = 0;i < markers.length;i++){
+                // Add marker
+                addMarker(markers[i]);
+            }
+
+            // Add Marker Function
+            function addMarker(props){
+                var marker = new google.maps.Marker({
+                position:props.coords,
+                map:map,
+                });
+
+                // Check content
+                if(props.content){
+                var infoWindow = new google.maps.InfoWindow({
+                    content:props.content
+                });
+
+                marker.addListener('click', function(){
+                    infoWindow.open(map, marker);
+                });
+                }
+            }
+           }
+        </script>
+
+
+    </body>
+
+</html>

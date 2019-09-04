@@ -17,12 +17,12 @@ $('#register').on('click', function ()
 
     if(name == null || email == null || password == null || confirmpassword == null)
     {
-        $('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
         console.log("Some fields are empty");
     }
     if(password != confirmpassword)
     {
-        $('#message').append(`<p class="alert alert-danger"> Passwords do not match </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Passwords do not match </p>`);
         
         Swal.fire({
             type: 'error',
@@ -33,7 +33,7 @@ $('#register').on('click', function ()
     }
     if(password.length <= 6)
     {
-        $('#message').append(`<p class="alert alert-danger"> Password should be more than 6 characters </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Password should be more than 6 characters </p>`);
         
         Swal.fire({
             type: 'error',
@@ -51,11 +51,11 @@ $('#register').on('click', function ()
                 location.href = '/login';
             }
             else {
-                $('#message').append(`<p class="alert alert-danger">${response}</p>`);
+                //$('#message').append(`<p class="alert alert-danger">${response}</p>`);
             }
         })
         .catch(err => {
-            $('#message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
+            //$('#message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
             
             Swal.fire({
                 type: 'error',
@@ -67,7 +67,7 @@ $('#register').on('click', function ()
     }
     else
     {
-        $('#message').append(`<p class="alert alert-danger"> Something went wrong </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Something went wrong </p>`);
         console.log("Something went wrong");
     }
 });
@@ -78,7 +78,7 @@ $('#login').on('click', () => {
 
     if(email == null || password == null)
     {
-        $('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
         console.log("Some fields are empty");
     }
     else
@@ -92,7 +92,7 @@ $('#login').on('click', () => {
             }
             else {
                 console.log('error')
-                $('#error-message').append(`<p class="alert alert-danger">${response}</p>`);
+                //$('#error-message').append(`<p class="alert alert-danger">${response}</p>`);
             }
         })
         .catch((err) => {
@@ -107,7 +107,7 @@ $('#login').on('click', () => {
               })
 
 
-            $('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
+            //$('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
         });
     }
 });
@@ -122,6 +122,23 @@ function getDeviceData(e) {
         },
         success: function(response) {
             console.log(response);
+            // On clicking a device its details are shown using modal 
+            $('#historyHead').append(`
+                <tr>
+                    <th>Date</th>
+                    <th>Reading</th>
+                </tr>
+            `);
+            response.data.map(response => {
+                $('#historyBody').append(`
+                    <tr>
+                        <td>${response.name}</td>
+                        <td>${response.type}</td>
+                        <td>${response.data.date}</td>
+                    </tr>
+                `);
+            });
+            $('#historyModal').modal('show');
         },
         error: function(err) {
             if(err.status == 401) {
@@ -194,6 +211,7 @@ $("#addDeviceForm").submit(function(event) {
         }
     });
 });
+
 
 // Loads footer.html using the footer id on division tag
 $('#footer').load('footer.html');
