@@ -173,23 +173,23 @@ function showAddDeviceform(el) {
 
 function showDeviceDataModal(response)
 {
-    $('#showDeviceModal').modal('show');
     // On clicking a device its details are shown using modal 
-    $('#historyHead').append(`
-        <tr>
-            <th>Date</th>
-            <th>Reading</th>
-        </tr>
-    `);
-    response.data.map(response => {
-        $('#historyBody').append(`
+    $('#showDeviceModal').find('.modal-body .table thead').append(`
             <tr>
-                <td>${response.name}</td>
-                <td>${response.type}</td>
-                <td>${response.data.date}</td>
+                <th>Date</th>
+                <th>Reading</th>
             </tr>
         `);
-    });      
+        response.data.map(response => {
+            $('#historyBody').append(`
+                <tr>
+                    <td>${response.name}</td>
+                    <td>${response.type}</td>
+                    <td>${response.data.date}</td>
+                </tr>
+            `);
+        });
+        $('#showDeviceModal').modal('show');             
 }
 
 $("#addDeviceForm").submit(function(event) {
