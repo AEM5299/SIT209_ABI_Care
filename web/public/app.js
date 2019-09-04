@@ -150,7 +150,6 @@ $(document).ready(function() {
                     <td width="200px" style="padding-right: 10%; cursor: pointer;">
                         <img src="/Images/${device.type}.png" alt="${device.type}" width="220" height="220" data-id="${device._id}" onclick="getDeviceData(this)">
                     </td>
-                    ${count % 3 == 2? "</tr>" : ""}
                     `)
                     count++;
                 })
@@ -173,23 +172,27 @@ function showAddDeviceform(el) {
 
 function showDeviceDataModal(response)
 {
-    // On clicking a device its details are shown using modal 
-    $('#showDeviceModal').find('.modal-body .table thead').append(`
+    // On clicking a device its details are shown using modal
+    const Headers = {'BPM': ['High', 'Low'], 'HRM': ['Heart Rate'], 'SLM': ['Glucose Level']};
+    $('#historyHead').empty();
+    $('#historyBody').empty();
+    $('#historyHead').append(`
+        <tr>
+            <th>Time</th>
+            <th>${Headers[response.type][0]}</th>
+            ${Headers[response.type][1]? `<th>${Headers[response.type][1]}</th>`:""}
+        </tr>
+    `);
+    response.data.map(readings => {
+        $('#historyBody').append(`
             <tr>
-                <th>Date</th>
-                <th>Reading</th>
+                <td>${readings[0]}</td>
+                <td>${readings[1]}</td>
+                ${readings[2]? `<th>${readings[2]}</th>`:""}
             </tr>
         `);
-        response.data.map(response => {
-            $('#historyBody').append(`
-                <tr>
-                    <td>${response.name}</td>
-                    <td>${response.type}</td>
-                    <td>${response.data.date}</td>
-                </tr>
-            `);
-        });
-        $('#showDeviceModal').modal('show');             
+    });
+    $('#showDeviceModal').modal('show');             
 }
 
 $("#addDeviceForm").submit(function(event) {

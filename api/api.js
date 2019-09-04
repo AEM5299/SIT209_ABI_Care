@@ -193,6 +193,7 @@ app.post('/api/devices', passport.authenticate('jwt'), (req, res) => {
 app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
     const { deviceId } = req.params;
     Device.findById(deviceId)
+        .select({ data: 1, name: 1, type: 1 })
         .then(device => {
             if(!device || toString(device.owner) !== toString(req.user.id)) return res.status(400).send('Unknown Device')
             if(toString(device.owner) == toString(req.user.id)) return res.json(device);
