@@ -28,8 +28,5 @@ module.exports = mongoose.model('User', new mongoose.Schema(
             type: String,
             default: Date.now
         },
-        loc:
-        {
-            
-        }
+        doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
     }));
