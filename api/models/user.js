@@ -20,12 +20,13 @@ module.exports = mongoose.model('User', new mongoose.Schema(
         usertype: 
         {
             type: String,
-            required: false,
+            required: true,
             default: 'patient'
         },
         date: 
         {
             type: String,
             default: Date.now
-        }
+        },
+        //doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
     }));

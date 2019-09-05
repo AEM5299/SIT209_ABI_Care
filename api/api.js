@@ -3,6 +3,7 @@ const express = require('express');
 // Importing our models
 const User = require('./models/user');
 const Device = require('./models/device');
+const Doctor = require('./models/doctor');
 // Importing what we use for encryption and authentication
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
@@ -165,7 +166,6 @@ app.get('/api/devices', passport.authenticate('jwt'), (req, res) => {
 
 });
 
-
 app.post('/api/devices', passport.authenticate('jwt'), (req, res) => {
     const {name, type} = req.body;
     User.findById(req.user.id)
@@ -194,6 +194,7 @@ app.post('/api/devices', passport.authenticate('jwt'), (req, res) => {
 app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
     const { deviceId } = req.params;
     Device.findById(deviceId)
+        .select({ data: 1, name: 1, type: 1 })
         .then(device => {
             if(!device || toString(device.owner) !== toString(req.user.id)) return res.status(400).send('Unknown Device')
             if(toString(device.owner) == toString(req.user.id)) return res.json(device);
@@ -204,11 +205,35 @@ app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
 
 });
 
+app.get('/api/doctors', (req,res) => {
+    Doctor.find({})
+    .select({address: 1, userID: 1, _id: 1})
+    .populate('userID', 'name')
+    .then(doctors => {
+        return res.json(doctors);
+    })
+    .catch(err => {
+        return res.send(err);
+    })
+});
+
+app.post('/api/createDoctor', (req, res) => {
+    const {name, email, street, city, state, postcode} = req.body;
+    doctoruser = new User({name: name, email: email, password: "fff", usertype: 'doctor'});
+    doctoruser.save((err, user) => {
+        if(err) return res.status(500).send(err);
+        doctor = new Doctor({userID: doctoruser._id, address: {street: street, city: city, state: state, postcode: parseInt(postcode)}});
+        doctor.save();
+        return res.send(doctor);
+    });
+});
+
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
 })
 // api end points end
 
 app.listen(port, () => {
+    console.log(`connected to mongoDBURL = ${process.env.MONGO_URL}`);
     console.log(`listening on port ${port}`);
 });

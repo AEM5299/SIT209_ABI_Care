@@ -17,7 +17,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" defer></script>
         <!--Adding the script for popper libraries which is used by bootstrap-->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" defer ></script>
-        <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="style.css" />
     </head>
 
@@ -53,8 +53,30 @@
             </tr>
         </table>
 
-<table id="devices">
+        
+
+        <table id="devices">
         </table>
+
+        <div class="modal fade" id="showDeviceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Device History</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead id="historyHead">
+                                </thead>
+                                <tbody id="historyBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 
 </html>

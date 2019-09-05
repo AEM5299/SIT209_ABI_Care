@@ -17,12 +17,12 @@ $('#register').on('click', function ()
 
     if(name == null || email == null || password == null || confirmpassword == null)
     {
-        $('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
         console.log("Some fields are empty");
     }
     if(password != confirmpassword)
     {
-        $('#message').append(`<p class="alert alert-danger"> Passwords do not match </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Passwords do not match </p>`);
         
         Swal.fire({
             type: 'error',
@@ -33,7 +33,7 @@ $('#register').on('click', function ()
     }
     if(password.length <= 6)
     {
-        $('#message').append(`<p class="alert alert-danger"> Password should be more than 6 characters </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Password should be more than 6 characters </p>`);
         
         Swal.fire({
             type: 'error',
@@ -51,11 +51,11 @@ $('#register').on('click', function ()
                 location.href = '/login';
             }
             else {
-                $('#message').append(`<p class="alert alert-danger">${response}</p>`);
+                //$('#message').append(`<p class="alert alert-danger">${response}</p>`);
             }
         })
         .catch(err => {
-            $('#message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
+            //$('#message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
             
             Swal.fire({
                 type: 'error',
@@ -67,7 +67,7 @@ $('#register').on('click', function ()
     }
     else
     {
-        $('#message').append(`<p class="alert alert-danger"> Something went wrong </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Something went wrong </p>`);
         console.log("Something went wrong");
     }
 });
@@ -78,7 +78,7 @@ $('#login').on('click', () => {
 
     if(email == null || password == null)
     {
-        $('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
+        //$('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
         console.log("Some fields are empty");
     }
     else
@@ -92,7 +92,7 @@ $('#login').on('click', () => {
             }
             else {
                 console.log('error')
-                $('#error-message').append(`<p class="alert alert-danger">${response}</p>`);
+                //$('#error-message').append(`<p class="alert alert-danger">${response}</p>`);
             }
         })
         .catch((err) => {
@@ -107,7 +107,7 @@ $('#login').on('click', () => {
               })
 
 
-            $('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
+            //$('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
         });
     }
 });
@@ -122,6 +122,7 @@ function getDeviceData(e) {
         },
         success: function(response) {
             console.log(response);
+            showDeviceDataModal(response);
         },
         error: function(err) {
             if(err.status == 401) {
@@ -149,7 +150,6 @@ $(document).ready(function() {
                     <td width="200px" style="padding-right: 10%; cursor: pointer;">
                         <img src="/Images/${device.type}.png" alt="${device.type}" width="220" height="220" data-id="${device._id}" onclick="getDeviceData(this)">
                     </td>
-                    ${count % 3 == 2? "</tr>" : ""}
                     `)
                     count++;
                 })
@@ -161,6 +161,29 @@ $(document).ready(function() {
                 }
             }
         });
+    } else if(window.location.pathname == '/doctors') {
+        $.ajax({
+            url: `${API_URL}/doctors`,
+            type: 'GET',
+            success: function(response) {
+                console.log(response);
+                const Geocoder = new google.maps.Geocoder();
+                response.forEach(doctor => {
+                    const address = `${doctor.address.street}, ${doctor.address.city} ${doctor.address.state} ${doctor.address.postcode}`
+                    Geocoder.geocode({ address: address}, function(results, status) {
+                        if (status === 'OK') {
+                            if (results[0]) {
+                                info = {coords: {lat: Number(results[0].geometry.location.lat()), lng: Number(results[0].geometry.location.lng())}, content: doctor.userID.name};
+                                addMarker(info);
+                            }
+                        }
+                    });
+                })
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
     }
 });
 
@@ -168,6 +191,31 @@ function showAddDeviceform(el) {
     const type = el.getAttribute('data-type');
     document.getElementById("typeField").value = type;
     $('#addDeviceModal').modal('show');
+}
+
+function showDeviceDataModal(response)
+{
+    // On clicking a device its details are shown using modal
+    const Headers = {'BPM': ['High', 'Low'], 'HRM': ['Heart Rate'], 'SLM': ['Glucose Level']};
+    $('#historyHead').empty();
+    $('#historyBody').empty();
+    $('#historyHead').append(`
+        <tr>
+            <th>Time</th>
+            <th>${Headers[response.type][0]}</th>
+            ${Headers[response.type][1]? `<th>${Headers[response.type][1]}</th>`:""}
+        </tr>
+    `);
+    response.data.map(readings => {
+        $('#historyBody').append(`
+            <tr>
+                <td>${readings[0]}</td>
+                <td>${readings[1]}</td>
+                ${readings[2]? `<th>${readings[2]}</th>`:""}
+            </tr>
+        `);
+    });
+    $('#showDeviceModal').modal('show');             
 }
 
 $("#addDeviceForm").submit(function(event) {
@@ -194,6 +242,7 @@ $("#addDeviceForm").submit(function(event) {
         }
     });
 });
+
 
 // Loads footer.html using the footer id on division tag
 $('#footer').load('footer.html');
