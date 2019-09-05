@@ -6,6 +6,10 @@ const base = `${__dirname}/public`;
 
 app.use(express.static(base));
 
+app.get('/', (req, res) => {
+    res.redirect('/home')
+});
+
 app.get('/login', (req, res) => {
     res.sendFile(`${base}/login.html`);
 });
