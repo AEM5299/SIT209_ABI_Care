@@ -3,6 +3,7 @@ const express = require('express');
 // Importing our models
 const User = require('./models/user');
 const Device = require('./models/device');
+const Doctor = require('./models/doctor');
 // Importing what we use for encryption and authentication
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
@@ -204,14 +205,27 @@ app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
 
 });
 
-app.get('/api/users', passport.authenticate('jwt'), (req,res) => {
-    User.find({usertype: 'doctor'})
-        .then(users => {
-            return res.send(users);
-        })
-        .catch(err => {
-            return res.send(err);
-        })
+app.get('/api/doctors', (req,res) => {
+    Doctor.find({})
+    .select({address: 1, userID: 1, _id: 1})
+    .populate('userID', 'name')
+    .then(doctors => {
+        return res.json(doctors);
+    })
+    .catch(err => {
+        return res.send(err);
+    })
+});
+
+app.post('/api/createDoctor', (req, res) => {
+    const {name, email, street, city, state, postcode} = req.body;
+    doctoruser = new User({name: name, email: email, password: "fff", usertype: 'doctor'});
+    doctoruser.save((err, user) => {
+        if(err) return res.status(500).send(err);
+        doctor = new Doctor({userID: doctoruser._id, address: {street: street, city: city, state: state, postcode: parseInt(postcode)}});
+        doctor.save();
+        return res.send(doctor);
+    });
 });
 
 app.get('*', (req, res) => {

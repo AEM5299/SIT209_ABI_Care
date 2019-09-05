@@ -5,7 +5,7 @@ const statesArray = ["VIC", "NSW", "TAS", "SA", "ACT", "QLD", "WA", "NT"];
 
 module.exports = mongoose.model('Doctor', new mongoose.Schema(
     {
-        userID: {type: mongoose.Schema.Types.ObjectId, ref:"User"},
+        userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
         address: {
             street: String,
             city: String,
@@ -16,5 +16,5 @@ module.exports = mongoose.model('Doctor', new mongoose.Schema(
             },
             postcode: Number
         },     
-        patients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+        //patients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
     }));

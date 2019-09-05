@@ -161,6 +161,29 @@ $(document).ready(function() {
                 }
             }
         });
+    } else if(window.location.pathname == '/doctors') {
+        $.ajax({
+            url: `${API_URL}/doctors`,
+            type: 'GET',
+            success: function(response) {
+                console.log(response);
+                const Geocoder = new google.maps.Geocoder();
+                response.forEach(doctor => {
+                    const address = `${doctor.address.street}, ${doctor.address.city} ${doctor.address.state} ${doctor.address.postcode}`
+                    Geocoder.geocode({ address: address}, function(results, status) {
+                        if (status === 'OK') {
+                            if (results[0]) {
+                                info = {coords: {lat: Number(results[0].geometry.location.lat()), lng: Number(results[0].geometry.location.lng())}, content: doctor.userID.name};
+                                addMarker(info);
+                            }
+                        }
+                    });
+                })
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
     }
 });
 

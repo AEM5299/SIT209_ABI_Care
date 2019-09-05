@@ -16,7 +16,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" defer></script>
         <!--Adding the script for popper libraries which is used by bootstrap-->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" defer ></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCzkSvjSw3mfS7JX2zMD3sQ_r8Pwy3VU0&callback=initMap"></script>
         <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="stylemap.css" />
@@ -39,56 +38,48 @@
             // Map options
             var options = {
                 zoom:10,
-                center:{lat: -37.8136, lng: 144.9631}
+                center:{lat: -30.8136, lng: 144.9631}
             }
 
             // New map
-            var map = new google.maps.Map(document.getElementById('map'), options);
-
-            // Array of markers
-            var markers = [
-                {
-                coords:{lat:-37.884169,lng: 145.015448},
-                content:'<h1>Caufield Hospital</h1>'
-                },
-                {
-                coords:{lat:-37.812206,lng:144.984226},
-                content:'<h1>St Vincents Private Hospital</h1>'
-                },
-                {
-                coords:{lat:-37.778934,lng:144.946892} ,
-                content:'<h1>The Royal Melbourne Hospital</h1>' 
-                }
-            ];
-
-            // Loop through markers
-            for(var i = 0;i < markers.length;i++){
-                // Add marker
-                addMarker(markers[i]);
-            }
-
-            // Add Marker Function
-            function addMarker(props){
-                var marker = new google.maps.Marker({
-                position:props.coords,
-                map:map,
+            window.map = new google.maps.Map(document.getElementById('map'), options);
+            //get user location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    window.map.setCenter(pos);
+                }, function() {
+                    console.log("User rejected location services");
                 });
+            } else {
+                console.log("Browser doesn't support location services");
+            }   
+        }
 
-                // Check content
-                if(props.content){
+        // Add Marker Function
+        function addMarker(props){
+            var marker = new google.maps.Marker({
+                position:props.coords,
+                map:window.map,
+            });
+
+            // Check content
+            if(props.content){
                 var infoWindow = new google.maps.InfoWindow({
                     content:props.content
                 });
 
                 marker.addListener('click', function(){
-                    infoWindow.open(map, marker);
+                    infoWindow.open(window.map, marker);
                 });
-                }
             }
-           }
+        }
         </script>
 
 
     </body>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOs1d12Zrjf7nT-76jAJvJKslM_PCsHRo&callback=initMap"></script>
 </html>
