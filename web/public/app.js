@@ -3,7 +3,7 @@ $('#navbar').load('navbar.html');
 
 const token = sessionStorage.getItem('token');
 // Stores the api url hosted using now
-const API_URL = "https://abi-care-api.herokuapp.com/api";
+const API_URL = "localhost:5000/api";
 // Stores the mqtt url hosted using now
 //const MQTT_URL = "";
 
