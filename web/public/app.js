@@ -17,13 +17,15 @@ $('#register').on('click', function ()
 
     if(name == null || email == null || password == null || confirmpassword == null)
     {
-        //$('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Some fields are empty',
+        })
         console.log("Some fields are empty");
     }
     if(password != confirmpassword)
     {
-        //$('#message').append(`<p class="alert alert-danger"> Passwords do not match </p>`);
-        
         Swal.fire({
             type: 'error',
             title: 'Oops...',
@@ -33,8 +35,6 @@ $('#register').on('click', function ()
     }
     if(password.length <= 6)
     {
-        //$('#message').append(`<p class="alert alert-danger"> Password should be more than 6 characters </p>`);
-        
         Swal.fire({
             type: 'error',
             title: 'Oops...',
@@ -42,7 +42,8 @@ $('#register').on('click', function ()
         })
         console.log("Password length is less than 6 characters");
     }
-    if (password == confirmpassword)
+    // was redirecting to login page even when no passwords were entered
+    if (password == confirmpassword && password != null && confirmpassword != null)
     {
         console.log("Passwords are the same, sending request to the api")
         $.post(`${API_URL}/registration`, { name, email, password, usertype }).then((response) => {
@@ -51,12 +52,15 @@ $('#register').on('click', function ()
                 location.href = '/login';
             }
             else {
-                //$('#message').append(`<p class="alert alert-danger">${response}</p>`);
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: `${response.responseJSON.message}`,
+                })
+                console.log(response.responseJSON.message);
             }
         })
         .catch(err => {
-            //$('#message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
-            
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
@@ -67,7 +71,6 @@ $('#register').on('click', function ()
     }
     else
     {
-        //$('#message').append(`<p class="alert alert-danger"> Something went wrong </p>`);
         console.log("Something went wrong");
     }
 });
@@ -78,7 +81,11 @@ $('#login').on('click', () => {
 
     if(email == null || password == null)
     {
-        //$('#message').append(`<p class="alert alert-danger"> Please fill out all the details </p>`);
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Missing Credentials',
+          })
         console.log("Some fields are empty");
     }
     else
@@ -88,26 +95,29 @@ $('#login').on('click', () => {
             {
                 console.log(response);
                 sessionStorage.setItem('token', response.token);
+                Swal.fire({
+                    type: 'success',
+                    title: 'Redirecting',
+                    text: 'Redirecting',
+                  })
                 location.href = '/home';
             }
             else {
                 console.log('error')
-                //$('#error-message').append(`<p class="alert alert-danger">${response}</p>`);
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text:  `${response.responseJSON.message}`,
+                  })
             }
         })
         .catch((err) => {
-
-
             console.log(err.responseJSON.message);
-
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: 'Wrong credentials!',
+                text:  `${err.responseJSON.message}`,
               })
-
-
-            //$('#error-message').append(`<p class="alert alert-danger">${err.responseJSON.message}</p>`);
         });
     }
 });
