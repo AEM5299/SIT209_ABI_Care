@@ -11,7 +11,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const passportJWT = require("passport-jwt");
-const JWTStrategy   = passportJWT.Strategy;
+const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
 // Connecting to mongoDB
@@ -91,7 +91,13 @@ passport.deserializeUser((id, done) => {
 // api end points start
 
 app.post('/api/registration', (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, usertype } = req.body;
+    const {streetaddress, city, state, postcode} = req.body;
+    if(usertype == 'doctor') {
+        if(!streetaddress || !city || !state || !postcode) {
+            return res.status(400).send("Incomplete information");
+        }
+    }
     User.findOne({ "email": email }, (err, users) => {
         if (err) {
             console.log("Information incorrect");
@@ -120,12 +126,22 @@ app.post('/api/registration', (req, res) => {
                     newUser.password = hash;
                     // Saving the user
                     newUser.save(err => {
-                        return err
-                            ? res.status(500).send(err)
-                            : res.json({
-                                success: true,
-                                message: 'Created new user'
+                        if (err) res.status(500).send(err);
+                        if (usertype == 'patient') res.json({
+                            success: true,
+                            message: 'Created new user'
+                        });
+                        else {
+                            doctor = new Doctor({userID: newUser._id, address: {street: streetaddress, city: city, state: state, postcode: parseInt(postcode)}});
+                            doctor.save(err => {
+                                return err ?
+                                    res.status(500).send(err)
+                                    : res.json({
+                                        success: true,
+                                        message: 'Created new Doctor'
+                                    });
                             });
+                        }
                     });
 
                 })
@@ -217,21 +233,10 @@ app.get('/api/doctors', (req,res) => {
     })
 });
 
-app.post('/api/createDoctor', (req, res) => {
-    const {name, email, street, city, state, postcode} = req.body;
-    doctoruser = new User({name: name, email: email, password: "fff", usertype: 'doctor'});
-    doctoruser.save((err, user) => {
-        if(err) return res.status(500).send(err);
-        doctor = new Doctor({userID: doctoruser._id, address: {street: street, city: city, state: state, postcode: parseInt(postcode)}});
-        doctor.save();
-        return res.send(doctor);
-    });
-});
-
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
 })
-// api end points end
+// api endpoints end
 
 app.listen(port, () => {
     console.log(`connected to mongoDBURL = ${process.env.MONGO_URL}`);
