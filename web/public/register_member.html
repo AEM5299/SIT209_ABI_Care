@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="description" content="Homepage for ABI Care application" />
+        <meta name="author" content="Abood, Brian, Idhant" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ABI Care</title>
+        <!--the use of defer tag allows us to place the scripts cleanly in the head tag and also making sure that parsing of scripts doesn`t stop the website from loading-->
+        <!--Adding the script for jquery which is use by app.js and bootstrap, hence added first in sequence-->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" defer></script>
+        <!--Adding the script for app.js-->
+        <script type="text/javascript" src="app.js" defer></script>
+        <!--Adding the script for popper libraries which is used by bootstrap, hence added before bootstrap-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" defer></script>
+        <!--Adding the script for popper libraries which is used by bootstrap-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" defer ></script>
+       <link rel="stylesheet" href="/bootstrap/css/bootstrap.css" />
+
+        <!-- Script for error alerts -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+        <link rel="stylesheet" href="style.css" />
+
+    </head>
+
+    <header>
+        <div class="container">
+            <div id="navbar"></div>
+            <div id="footer"></div>
+        </div>
+    </header>
+
+    <body>
+
+        <div class="login5">
+                
+            <h1>Register as a..</h1>
+            <form method="post">
+                <a style="width: 310px" href="/register" class="myButton5">Patient</a>
+                <a style="width: 310px" href="/registerdoctor" class="myButton5">Doctor</a>
+            </form>
+
+        </div>
+
+    </body>
+
+</html>
