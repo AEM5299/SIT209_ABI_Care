@@ -14,6 +14,14 @@ app.get('/login', (req, res) => {
     res.sendFile(`${base}/login.html`);
 });
 
+app.get('/registermember', (req, res) => {
+    res.sendFile(`${base}/register_member.html`);
+});
+
+app.get('/registerdoctor', (req, res) => {
+    res.sendFile(`${base}/register_doctor.html`);
+});
+
 app.get('/register', (req, res) => {
     res.sendFile(`${base}/register.html`);
 });
@@ -38,6 +46,10 @@ app.get('/doctors', (req, res) => {
     res.sendFile(`${base}/doctors.html`);
 });
 
+app.get('/medical', (req, res) => {
+    res.sendFile(`${base}/medical.html`);
+});
+
 app.get('/home', (req, res) => {
     res.sendFile(`${base}/homepage.html`);
 });
@@ -48,5 +60,4 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
-    
 });
