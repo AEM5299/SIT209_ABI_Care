@@ -95,11 +95,6 @@ $('#login').on('click', () => {
             {
                 console.log(response);
                 sessionStorage.setItem('token', response.token);
-                Swal.fire({
-                    type: 'success',
-                    title: 'Redirecting',
-                    text: 'Redirecting',
-                  })
                 location.href = '/home';
             }
             else {

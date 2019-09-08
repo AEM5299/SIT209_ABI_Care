@@ -14,6 +14,14 @@ app.get('/login', (req, res) => {
     res.sendFile(`${base}/login.html`);
 });
 
+app.get('/registermember', (req, res) => {
+    res.sendFile(`${base}/register_member.html`);
+});
+
+app.get('/registerdoctor', (req, res) => {
+    res.sendFile(`${base}/register_doctor.html`);
+});
+
 app.get('/register', (req, res) => {
     res.sendFile(`${base}/register.html`);
 });
