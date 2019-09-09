@@ -40,31 +40,32 @@
                 <table>
                     <tr>
                         <th style="padding-right: 2%">
-                            <input type="text" name="u" placeholder="Name" required="required" id="name"/>
+                            <input type="text" name="name" placeholder="Name" required="required" id="name"/>
                         </th>
                         <th>
-                            <input type="text" name="c" placeholder="Company Name" required="required" id="company" />
+                            <input type="text" name="company" placeholder="Company Name" required="required" id="company" />
                         </th>
                     </tr>
                 </table>
-                <input type="text" name="e" placeholder="Email Address" required="required" id="email" />
-                <input type="text" name="s" placeholder="Street Address" required="required" id="streetaddress" />
-                <input type="text" name="c" placeholder="City" required="required" id="city" />
+                <input type="text" name="email" placeholder="Email Address" required="required" id="email" />
+                <input type="text" name="streetaddress" placeholder="Street Address" required="required" id="streetaddress" />
+                <input type="text" name="city" placeholder="City" required="required" id="city" />
                 <table>
                         <tr>
                             <th style="padding-right: 2%">
-                                <input type="text" name="s" placeholder="State" required="required" id="state"/>
+                                <input type="text" name="state" placeholder="State" required="required" id="state"/>
                             </th>
                             <th>
-                                <input type="text" name="p" placeholder="Postcode" required="required" id="postcode" />
+                                <input type="text" name="postcode" placeholder="Postcode" required="required" id="postcode" />
                             </th>
                         </tr>
                     </table>
 
-                <input type="password" name="p" placeholder="Password" required="required" id="password"/>
-                <input type="password" name="cp" placeholder="Comfirm Password" required="required" id="confirm-password" />
+                <input type="password" name="password" placeholder="Password" required="required" id="password"/>
+                <input type="password" name="confirm-password" placeholder="Comfirm Password" required="required" id="confirm-password" />
+                <input type='hidden' name='userType' value="doctor" />
 
-                <a id="register" class="myButton4">Register</a>
+                <a id="registerDoctor" class="myButton4">Register</a>
             </form>
 
             <p><br>Login <a href="/login">here</a></p>

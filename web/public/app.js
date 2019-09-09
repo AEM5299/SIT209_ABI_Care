@@ -16,7 +16,7 @@ $('#register').on('click', function ()
     const confirmpassword = $('#confirm-password').val();
     const usertype = "patient";
 
-    if(name == null || email == null || password == null || confirmpassword == null)
+    if(name == '' || email == '' || password == '' || confirmpassword == '')
     {
         Swal.fire({
             type: 'error',
@@ -24,6 +24,7 @@ $('#register').on('click', function ()
             text: 'Some fields are empty',
         })
         console.log("Some fields are empty");
+        return;
     }
     if(password != confirmpassword)
     {
@@ -33,8 +34,9 @@ $('#register').on('click', function ()
             text: 'Password do not match',
         })
         console.log("Passwords do not match");
+        return;
     }
-    if(password.length <= 6)
+    if(password.length < 6)
     {
         Swal.fire({
             type: 'error',
@@ -42,12 +44,98 @@ $('#register').on('click', function ()
             text: 'Password needs to be at least 6 characters',
         })
         console.log("Password length is less than 6 characters");
+        return;
     }
     // was redirecting to login page even when no passwords were entered
     if (password == confirmpassword && password != null && confirmpassword != null)
     {
         console.log("Passwords are the same, sending request to the api")
         $.post(`${API_URL}/registration`, { name, email, password, usertype }).then((response) => {
+            console.log(response);
+            if (response.success) {
+                location.href = '/login';
+            }
+            else {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: `${response.responseJSON.message}`,
+                })
+                console.log(response.responseJSON.message);
+            }
+        })
+        .catch(err => {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: `${err.responseJSON.message}`,
+            })
+            console.log(err.responseJSON.message);
+        });
+    }
+    else
+    {
+        console.log("Something went wrong");
+    }
+});
+
+
+$('#registerDoctor').on('click', function ()
+{
+    const name = $('#name').val();
+    const email = $(`#email`).val();
+    const password = $('#password').val();
+    const confirmpassword = $('#confirm-password').val();
+    const usertype = "doctor";
+    const streetaddress = $('#streetaddress').val();
+    const city = $('#city').val();
+    const state = $('#state').val();
+    const postcode = $('#postcode').val();
+
+    if(name == '' || email == '' || password == '' || confirmpassword == '' || streetaddress == '' || city == '' || state == '' || postcode == '')
+    {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Some fields are empty',
+        })
+        console.log("Some fields are empty");
+        return;
+    }
+    if(password != confirmpassword)
+    {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Password do not match',
+        })
+        console.log("Passwords do not match");
+        return;
+    }
+    if(password.length < 6)
+    {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Password needs to be at least 6 characters',
+        })
+        console.log("Password length is less than 6 characters");
+        return;
+    }
+    if(isNaN(postcode)) {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Postcode is in the wrong format',
+        })
+        console.log("Postcode is in the wrong format");
+        return;
+    }
+    // was redirecting to login page even when no passwords were entered
+    if (password == confirmpassword && password != '' && confirmpassword != '')
+    {
+        console.log("Passwords are the same, sending request to the api")
+        $.post(`${API_URL}/registration`, { name, email, password, usertype, streetaddress, city, state, postcode }).then((response) => {
             console.log(response);
             if (response.success) {
                 location.href = '/login';

@@ -15,6 +15,6 @@ module.exports = mongoose.model('Doctor', new mongoose.Schema(
                 enum: statesArray
             },
             postcode: Number
-        },     
-        //patients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+        },
+        patients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
     }));
