@@ -3,10 +3,8 @@
     <h1 class="logo"><a href="/home">ABI CARE</a></h1>
     <nav>
         <ul>
-            <li><a id="menu1" href="/devices">Devices</a></li>
-            <li><a id="menu3" href="/">History</a></li>
-            <li><a id="menu4" href="/medical">Medical</a></li>
-            <li><a id="menu2" href="/doctors">Doctors</a></li>
+            <li><a id="menu1" href="/patients">Patients</a></li>
+            <li><a id="menu2" href="/appointments">Appointments</a></li>
             <li><a id="auth" href="#"></a></li>
         </ul>
     </nav>
@@ -18,8 +16,6 @@
 
         var menu1 = document.getElementById('menu1');
         var menu2 = document.getElementById('menu2');
-        var menu3 = document.getElementById('menu3');
-        var menu4 = document.getElementById('menu4');
 
         if(isAuthenticated) {
             element.innerHTML = 'Logout';
@@ -29,15 +25,11 @@
             }
             menu1.style.display="contents";
             menu2.style.display="contents";
-            menu3.style.display="contents";
-            menu4.style.display="contents";
         } else {
             element.innerHTML = 'Login';
             element.href = '/login';
             menu1.style.display="none";
             menu2.style.display="none";
-            menu3.style.display="none";
-            menu4.style.display="none";
 
         }
 </script>

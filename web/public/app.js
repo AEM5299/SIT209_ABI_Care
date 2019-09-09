@@ -1,5 +1,6 @@
 // Loads navbar.html using the navbar id on division tag
 $('#navbar').load('navbar.html');
+$('#navbar-doctors').load('navbar_doctors.html');
 
 const token = sessionStorage.getItem('token');
 // Stores the api url hosted using now

@@ -22,6 +22,23 @@
     margin-bottom: 0;
 }
 
+.login1 .myButton1:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffc533));
+	background:-moz-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:-webkit-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:-o-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:-ms-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:linear-gradient(to bottom, #ffab23 5%, #ffc533 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffc533',GradientType=0);
+    background-color:#ffab23;
+    color: white;
+}
+
+.login1 .myButton1:active {
+	position:relative;
+	top:1px;
+}
+
 .login2 .myButton2 {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffb300), color-stop(1, #f09400));
 	background:-moz-linear-gradient(top, #ffb300 5%, #f09400 100%);
@@ -45,22 +62,6 @@
     margin-bottom: 0;
 }
 
-.login1 .myButton1:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffc533));
-	background:-moz-linear-gradient(top, #ffab23 5%, #ffc533 100%);
-	background:-webkit-linear-gradient(top, #ffab23 5%, #ffc533 100%);
-	background:-o-linear-gradient(top, #ffab23 5%, #ffc533 100%);
-	background:-ms-linear-gradient(top, #ffab23 5%, #ffc533 100%);
-	background:linear-gradient(to bottom, #ffab23 5%, #ffc533 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffc533',GradientType=0);
-    background-color:#ffab23;
-    color: white;
-}
-.login1 .myButton1:active {
-	position:relative;
-	top:1px;
-}
-
 .login2 .myButton2:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffc533));
 	background:-moz-linear-gradient(top, #ffab23 5%, #ffc533 100%);
@@ -72,6 +73,7 @@
     background-color:#ffab23;
     color: white;
 }
+
 .login2 .myButton2:active {
 	position:relative;
 	top:1px;
@@ -111,6 +113,7 @@
     background-color:#ffab23;
     color: white;
 }
+
 .login3 .myButton3:active {
 	position:relative;
 	top:1px;
@@ -196,6 +199,47 @@
 	position:relative;
 	top:1px;
 }
+
+.homepagebuttons .loginregister {
+    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffb300), color-stop(1, #f09400));
+	background:-moz-linear-gradient(top, #ffb300 5%, #f09400 100%);
+	background:-webkit-linear-gradient(top, #ffb300 5%, #f09400 100%);
+	background:-o-linear-gradient(top, #ffb300 5%, #f09400 100%);
+	background:-ms-linear-gradient(top, #ffb300 5%, #f09400 100%);
+	background:linear-gradient(to bottom, #ffb300 5%, #f09400 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffb300', endColorstr='#f09400',GradientType=0);
+	background-color:#ffb300;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:18px;
+    font-weight:bold;
+	padding:6px;
+    text-decoration:none;
+    text-align: center;
+}
+
+.homepagebuttons .loginregister:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffc533));
+	background:-moz-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:-webkit-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:-o-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:-ms-linear-gradient(top, #ffab23 5%, #ffc533 100%);
+	background:linear-gradient(to bottom, #ffab23 5%, #ffc533 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffc533',GradientType=0);
+    background-color:#ffab23;
+    color: white;
+}
+
+.homepagebuttons .loginregister:active {
+	position:relative;
+	top:1px;
+}
+
 /* sets width for the Username & Password input boxes */
 * { 
     -webkit-box-sizing:border-box; 
@@ -362,6 +406,19 @@ body {
     color: orange;
 }
 
+/* Formats buttons on the homepages */
+.homepagebuttons th {
+    padding-right: 5%;
+}
+
+.homepagebuttons h1 {
+    margin-top: 1%;
+    color: #fff; 
+    text-shadow: 0 0 10px rgba(0,0,0,0.3); 
+    letter-spacing:1px; 
+    text-align: center; 
+}
+
 /* sets user input for the Username & Password input boxes */
 input { 
     width: 100%; 
@@ -433,7 +490,7 @@ h1.home1 {
 }
 
 h1.home2 {
-    margin-top: 4%;
+    margin-top: 1%;
     color: white;
     text-align: center;
     font-size: 900%;
@@ -447,7 +504,7 @@ h1.home3 {
     color: white;
     text-align: center;
     font-size: 500%;
-    margin-bottom: 0%;
+    margin-bottom: 4%;
     cursor: default;
     margin-left: 0;
     line-height: 10px;
@@ -475,12 +532,14 @@ h1.home2:hover span:nth-child(even) {
     width: 100%;
     pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
 }
+
 .vertical-align-center {
     /* To center vertically */
     display: table-cell;
     vertical-align: middle;
     pointer-events:none;
 }
+
 .modal-content {
     /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
     width:inherit;
