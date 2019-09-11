@@ -114,7 +114,8 @@ app.post('/api/registration', (req, res) => {
             const newUser = new User({
                 name,
                 email,
-                password
+                password,
+                usertype
             });
 
             // Hashing Password in mongoDB
@@ -165,7 +166,7 @@ app.post('/api/authenticate', (req, res, next) => {
            }
            const payload = {id: user._id, email: user.email};
            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
-           return res.json({success: true, token});
+           return res.json({success: true, token, usertype: user.usertype});
         });
     })(req, res, next);
 

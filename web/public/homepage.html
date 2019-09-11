@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    
+
     <head>
         <meta charset="utf-8" />
         <meta name="description" content="Homepage for ABI Care application" />
@@ -23,7 +23,6 @@
     <header>
         <div class="container">
             <div id="navbar"></div>
-            <!-- <div id="navbar-doctors"></div> -->
             <div id="footer"></div>
         </div>
     </header>
@@ -60,10 +59,10 @@
 
     <script>
             const isLogged = sessionStorage.getItem('token');
-    
+
             var login = document.getElementById('loginbutton');
             var register = document.getElementById('registerbutton');
-    
+
             if(isLogged) {
                 login.style.display="none";
                 register.style.display="none";

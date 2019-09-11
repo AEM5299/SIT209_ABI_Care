@@ -21,7 +21,7 @@ module.exports = mongoose.model('User', new mongoose.Schema(
         {
             type: String,
             required: true,
-            default: 'patient'
+            enum: ['patient', 'doctor']
         },
         date:
         {

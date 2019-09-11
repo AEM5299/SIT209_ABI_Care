@@ -34,11 +34,11 @@
         </div>
         <div id="map" class="map"></div>
         <script>
-           function initMap(){
-            // Map options
-            var options = {
-                zoom:10,
-                center:{lat: -30.8136, lng: 144.9631}
+            function initMap(){
+                // Map options
+                var options = {
+                    zoom:10,
+                    center:{lat: -30.8136, lng: 144.9631}
             }
 
             // New map
@@ -56,7 +56,8 @@
                 });
             } else {
                 console.log("Browser doesn't support location services");
-            }   
+            }
+            getDoctors();
         }
 
         // Add Marker Function
@@ -76,6 +77,31 @@
                     infoWindow.open(window.map, marker);
                 });
             }
+        }
+
+        function getDoctors() {
+            $.ajax({
+                url: `${API_URL}/doctors`,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    const Geocoder = new google.maps.Geocoder();
+                    response.forEach(doctor => {
+                        const address = `${doctor.address.street}, ${doctor.address.city} ${doctor.address.state} ${doctor.address.postcode}`
+                        Geocoder.geocode({ address: address}, function(results, status) {
+                            if (status === 'OK') {
+                                if (results[0]) {
+                                    info = {coords: {lat: Number(results[0].geometry.location.lat()), lng: Number(results[0].geometry.location.lng())}, content: doctor.userID.name};
+                                    addMarker(info);
+                                }
+                            }
+                        });
+                    })
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
         }
         </script>
 
