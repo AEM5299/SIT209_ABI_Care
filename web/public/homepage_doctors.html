@@ -29,7 +29,6 @@
 
     <body>
 <h1 class="home1">Welcome to</h1>
-        <!-- <h1 class="home2">ABI CARE</h1> -->
         <h1 class="home2">
             <span>A</span><span>bood</span>
             <span>B</span><span>rian</span>
@@ -38,38 +37,6 @@
 
         <h1 class="home3">CARE</h1>
 
-        <div class="homepagebuttons">
-            <table>
-                <tr>
-                    <th>
-                        <form method="post">
-                            <a id="loginbutton" style="width: 200px" href="/registermember" class="loginregister">Register</a>
-                        </form>
-                    </th>
-                    <th>
-                        <form method="post">
-                            <a id="registerbutton" style="width: 200px" href="/login" class="loginregister">Login</a>
-                        </form>
-                    </th>
-                </tr>
-            </table>
-        </div>
-
     </body>
-
-    <script>
-            const isLogged = sessionStorage.getItem('token');
-
-            var login = document.getElementById('loginbutton');
-            var register = document.getElementById('registerbutton');
-
-            if(isLogged) {
-                login.style.display="none";
-                register.style.display="none";
-            } else {
-                login.style.display="homepagebuttons";
-                register.style.display="homepagebuttons";
-            }
-    </script>
 
 </html>

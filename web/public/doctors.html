@@ -33,12 +33,36 @@
             <h1 style="cursor: default">Your Doctors</h1>
         </div>
         <div id="map" class="map"></div>
+        <div class="modal fade" id="makeAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="vertical-alignment-helper">
+                <div class="modal-dialog vertical-align-center">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Make Appointment</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form id="makeAppointmentForm" onsubmit="event.preventDefault();">
+                                <input type='hidden' id='doctor_id'>
+                                <input type="date" name="date" id="dateField" required>
+                                <select id="slotField" required>
+                                    <option selected disabled>Select</option>
+                                    <option value="1">12:00 PM to 12:30 PM</option>
+                                    <option value="2">12:30 PM to 1:00 PM</option>
+                                    <option value="3">1:00 PM to 1:30 PM</option>
+                                </select>
+                                <button id="makeAppointmentBtn" class="btn btn-success" onclick="makeAppointment()">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
-           function initMap(){
-            // Map options
-            var options = {
-                zoom:10,
-                center:{lat: -30.8136, lng: 144.9631}
+            function initMap(){
+                // Map options
+                var options = {
+                    zoom:10,
+                    center:{lat: -30.8136, lng: 144.9631}
             }
 
             // New map
@@ -56,7 +80,8 @@
                 });
             } else {
                 console.log("Browser doesn't support location services");
-            }   
+            }
+            getDoctors();
         }
 
         // Add Marker Function
@@ -69,7 +94,7 @@
             // Check content
             if(props.content){
                 var infoWindow = new google.maps.InfoWindow({
-                    content:props.content
+                    content:`${props.content.userID.name}<br><button data-doctor-id="${props.content.userID._id}" onclick='showAppointmentForm(this)'>Make Appointment</button>`
                 });
 
                 marker.addListener('click', function(){
@@ -77,6 +102,58 @@
                 });
             }
         }
+
+        function getDoctors() {
+            $.ajax({
+                url: `${API_URL}/doctors`,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    const Geocoder = new google.maps.Geocoder();
+                    response.forEach(doctor => {
+                        const address = `${doctor.address.street}, ${doctor.address.city} ${doctor.address.state} ${doctor.address.postcode}`
+                        Geocoder.geocode({ address: address}, function(results, status) {
+                            if (status === 'OK') {
+                                if (results[0]) {
+                                    info = {coords: {lat: Number(results[0].geometry.location.lat()), lng: Number(results[0].geometry.location.lng())}, content: doctor};
+                                    addMarker(info);
+                                }
+                            }
+                        });
+                    })
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        function showAppointmentForm(el) {
+            const doctorid = el.getAttribute('data-doctor-id');
+            document.getElementById("doctor_id").value = doctorid;
+            $('#makeAppointmentModal').modal('show');
+        }
+
+        function makeAppointment() {
+            const doctor_id = $('#doctor_id').val();
+            const date = $('#dateField').val();
+            const slot = $('#slotField').val();
+            $.ajax({
+                url: `${API_URL}/appointment`,
+                data: {doctorid: doctor_id, date, slot},
+                type: 'POST',
+                headers: {
+                    'Authorization': `bearer ${sessionStorage.getItem('token')}`
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        }
+
         </script>
 
 

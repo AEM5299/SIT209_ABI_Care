@@ -46,12 +46,24 @@ app.get('/doctors', (req, res) => {
     res.sendFile(`${base}/doctors.html`);
 });
 
+app.get('/appointments', (req, res) => {
+    res.sendFile(`${base}/appointments.html`);
+});
+
+app.get('/patients', (req, res) => {
+    res.sendFile(`${base}/patients.html`);
+});
+
 app.get('/medical', (req, res) => {
     res.sendFile(`${base}/medical.html`);
 });
 
 app.get('/home', (req, res) => {
     res.sendFile(`${base}/homepage.html`);
+});
+
+app.get('/doctorshome', (req, res) => {
+    res.sendFile(`${base}/homepage_doctors.html`);
 });
 
 app.get('*', (req, res) => {

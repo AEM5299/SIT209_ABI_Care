@@ -3,11 +3,16 @@
     <h1 class="logo"><a href="/home">ABI CARE</a></h1>
     <nav>
         <ul>
-            <li><a id="menu1" href="/devices">Devices</a></li>
+            <li><a id="menu1" href="#" style="display: none;"></a></li>
+            <li><a id="menu2" href="#" style="display: none;"></a></li>
+            <li><a id="menu3" href="#" style="display: none;"></a></li>
+            <li><a id="menu4" href="#" style="display: none;"></a></li>
+            <li><a id="auth" href="#"></a></li>
+            <!-- <li><a id="menu1" href="/devices">Devices</a></li>
             <li><a id="menu3" href="/">History</a></li>
             <li><a id="menu4" href="/medical">Medical</a></li>
             <li><a id="menu2" href="/doctors">Doctors</a></li>
-            <li><a id="auth" href="#"></a></li>
+            <li><a id="auth" href="#"></a></li> -->
         </ul>
     </nav>
 </div>
@@ -16,26 +21,44 @@
         const isAuthenticated = sessionStorage.getItem('token');
         var element = document.getElementById('auth');
 
-        var menu1 = document.getElementById('menu1');
-        var menu2 = document.getElementById('menu2');
-        var menu3 = document.getElementById('menu3');
-        var menu4 = document.getElementById('menu4');
-
         if(isAuthenticated) {
             element.innerHTML = 'Logout';
             element.onclick = (event) => {
                 sessionStorage.removeItem('token');
+                sessionStorage.removeItem('usertype');
                 location.href = '/login';
             }
-            menu1.style.display="contents";
-            menu3.style.display="contents";
-            menu4.style.display="contents";
+            const UserType = sessionStorage.getItem('usertype');
+            let menu1 = document.getElementById('menu1');
+            let menu2 = document.getElementById('menu2');
+            let menu3 = document.getElementById('menu3');
+            let menu4 = document.getElementById('menu4');
+            if(UserType == 'patient') {
+                menu1.innerHTML = 'Devices';
+                menu1.href = '/devices';
+                menu2.innerHTML = 'History';
+                menu3.innerHTML = 'Medical';
+                menu4.innerHTML = 'Doctors';
+                menu4.href = '/doctors';
+                menu1.style.display="contents";
+                menu2.style.display="contents";
+                menu3.style.display="contents";
+                menu4.style.display="contents";
+            } else if(UserType == 'doctor') {
+                menu4.innerHTML = 'Patients';
+                menu4.href = '/patients';
+                menu3.innerHTML = 'Appointments';
+                menu3.href = '/appointments';
+                menu4.style.display="contents";
+                menu3.style.display="contents";
+            }
         } else {
             element.innerHTML = 'Login';
             element.href = '/login';
             menu1.style.display="none";
+            menu2.style.display="none";
             menu3.style.display="none";
             menu4.style.display="none";
-
         }
+
 </script>

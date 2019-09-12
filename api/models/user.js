@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Doctor = require('./doctor');
 
-module.exports = mongoose.model('User', new mongoose.Schema(
+var UserSchema = new mongoose.Schema(
     {
         name:
         {
@@ -21,12 +22,20 @@ module.exports = mongoose.model('User', new mongoose.Schema(
         {
             type: String,
             required: true,
-            default: 'patient'
+            enum: ['patient', 'doctor']
         },
         date:
         {
             type: String,
             default: Date.now
         },
-        doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-    }));
+        doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+
+    });
+
+UserSchema.methods.isDoctor = function isDocotr() {
+    return this.usertype == 'doctor';
+}
+
+mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User')

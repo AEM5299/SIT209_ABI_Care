@@ -183,6 +183,7 @@ $('#login').on('click', () => {
             {
                 console.log(response);
                 sessionStorage.setItem('token', response.token);
+                sessionStorage.setItem('usertype', response.usertype);
                 location.href = '/home';
             }
             else {
@@ -254,31 +255,47 @@ $(document).ready(function() {
                 }
             }
         });
-    } else if(window.location.pathname == '/doctors') {
+    }
+    if (window.location.pathname == '/appointments') {
         $.ajax({
-            url: `${API_URL}/doctors`,
+            url: `${API_URL}/appointment`,
             type: 'GET',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
             success: function(response) {
-                console.log(response);
-                const Geocoder = new google.maps.Geocoder();
-                response.forEach(doctor => {
-                    const address = `${doctor.address.street}, ${doctor.address.city} ${doctor.address.state} ${doctor.address.postcode}`
-                    Geocoder.geocode({ address: address}, function(results, status) {
-                        if (status === 'OK') {
-                            if (results[0]) {
-                                info = {coords: {lat: Number(results[0].geometry.location.lat()), lng: Number(results[0].geometry.location.lng())}, content: doctor.userID.name};
-                                addMarker(info);
-                            }
-                        }
-                    });
+                response.forEach(appointment => {
+                    $('#appointments').append(`
+                    <tr>
+                        <td colspan='2'>${appointment.date.slice(0, 10)}</td>
+                        <td>${slotToTime(appointment.slot)}</td>
+                        <td>${appointment.patient.name}</td>
+                    </tr>
+                    `)
                 })
+                console.log(response);
             },
             error: function(err) {
-                console.log(err);
+                if(err.status == 401) {
+                    location.href = '/login';
+                }
             }
         });
     }
 });
+
+function slotToTime(slot) {
+    switch(slot) {
+        case 1:
+            return "12:00 PM to 12:30 PM";
+        case 2:
+            return "12:30 PM to 1:00 PM";
+        case 3:
+            return "1:00 PM to 1:30 PM";
+        default:
+            return "NULL";
+    }
+}
 
 function showAddDeviceform(el) {
     const type = el.getAttribute('data-type');
@@ -308,7 +325,7 @@ function showDeviceDataModal(response)
             </tr>
         `);
     });
-    $('#showDeviceModal').modal('show');             
+    $('#showDeviceModal').modal('show');
 }
 
 $("#addDeviceForm").submit(function(event) {
