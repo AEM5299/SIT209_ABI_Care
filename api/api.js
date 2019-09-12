@@ -4,6 +4,7 @@ const express = require('express');
 const User = require('./models/user');
 const Device = require('./models/device');
 const Doctor = require('./models/doctor');
+const Appointment = require('./models/appointment');
 // Importing what we use for encryption and authentication
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
@@ -69,7 +70,8 @@ passport.use(new JWTStrategy({
                 return cb(null, {
                     id: user._id,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    userType: user.usertype
                 });
             })
             .catch(err => {
@@ -233,6 +235,44 @@ app.get('/api/doctors', (req,res) => {
         return res.send(err);
     })
 });
+
+app.post('/api/appointment', passport.authenticate('jwt'), (req, res) => {
+    const { date, slot, doctorid } = req.body;
+    Appointment.findOne({doctor: doctorid, date, slot})
+    .then(appointment => {
+        if(appointment) return res.send("Appointment Already filled");
+        if(!appointment) {
+            const newAppointment = new Appointment({
+                date,
+                slot,
+                doctor: doctorid,
+                patient: req.user.id
+            })
+            newAppointment.save((err, result) => {
+                if(err) return res.send(err);
+                else return res.send('Appointment made');
+            })
+        }
+    })
+    .catch(err => {
+        return res.send(err);
+    })
+})
+
+app.get('/api/appointment', passport.authenticate('jwt'), (req, res) => {
+    if(req.user.userType != 'doctor') {
+        return res.status(401).send('Unauthorized');
+    }
+    Appointment.find({doctor: req.user.id})
+    .populate('patient', 'name')
+    .sort({ date: 1, slot: 1 })
+    .then(appointments => {
+        res.json(appointments);
+    })
+    .catch(err => {
+        return res.send(err);
+    })
+})
 
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
