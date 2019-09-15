@@ -5,7 +5,7 @@ const token = sessionStorage.getItem('token');
 // Stores the api url hosted using now
 const API_URL = "http://localhost:5000/api";
 // Stores the mqtt url hosted using now
-//const MQTT_URL = "";
+const MQTT_URL = "http://localhost:5000/mqtt";
 
 $('#register').on('click', function ()
 {
@@ -77,7 +77,6 @@ $('#register').on('click', function ()
         console.log("Something went wrong");
     }
 });
-
 
 $('#registerDoctor').on('click', function ()
 {
@@ -282,6 +281,32 @@ $(document).ready(function() {
             }
         });
     }
+    if (window.location.pathname == '/patients') {
+        $.ajax({
+            url: `${API_URL}/patients`,
+            type: 'GET',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
+            success: function(response) {
+                response.forEach(users => {
+                    $('#patients').append(`
+                    <tr>
+                        <td>${users.name}</td>
+                        <td>${users.email}</td>
+                        <td>"Empty"</td>
+                    </tr>
+                    `)
+                })
+                console.log(response);
+            },
+            error: function(err) {
+                if(err.status == 401) {
+                    location.href = '/login';
+                }
+            }
+        })
+    }
 });
 
 function slotToTime(slot) {
@@ -352,7 +377,6 @@ $("#addDeviceForm").submit(function(event) {
         }
     });
 });
-
 
 // Loads footer.html using the footer id on division tag
 $('#footer').load('footer.html');

@@ -236,6 +236,20 @@ app.get('/api/doctors', (req,res) => {
     })
 });
 
+app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
+    if(req.user.userType != 'doctor') {
+        return res.status(401).send('Unauthorized');
+    }
+    User.find({doctors: req.user.id})
+        .then(users => {
+            console.log(users);
+            return res.json(users);            
+        })
+        .catch(err => {
+            return res.send(err);
+        })
+})
+
 app.post('/api/appointment', passport.authenticate('jwt'), (req, res) => {
     const { date, slot, doctorid } = req.body;
     Appointment.findOne({doctor: doctorid, date, slot})
