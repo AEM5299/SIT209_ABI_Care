@@ -237,9 +237,8 @@ app.get('/api/doctors', (req,res) => {
     })
 });
 
-app.get('/api/doctors/:doctorId', passport.authenticate('jwt'), (req, res) => {
-
-});
+// app.get('/api/doctors/:doctorId', passport.authenticate('jwt'), (req, res) => {
+// });
 
 app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
     if(req.user.userType != 'doctor') {
@@ -258,9 +257,8 @@ app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
         })
 })
 
-app.get('/api/patients/:patientId', passport.authenticate('jwt'), (req, res) => {
-
-});
+// app.get('/api/patients/:patientId', passport.authenticate('jwt'), (req, res) => {
+// });
 
 app.post('/api/appointment', passport.authenticate('jwt'), (req, res) => {
     const { date, slot, doctorid } = req.body;
@@ -301,7 +299,30 @@ app.get('/api/appointment', passport.authenticate('jwt'), (req, res) => {
 })
 
 app.get('/api/history', passport.authenticate('jwt'), (req, res) => {
-
+    if(req.user.userType == 'doctor')
+    {
+        History.find({doctor: req.user.id})
+        .then(history =>{
+            return res.json(history);
+        })
+        .catch(err => {
+            return res.send(err);
+        })
+    }
+    if(req.user.userType == 'patient')
+    {
+        History.find({patient: req.user.id})
+        .then(history =>{
+            return res.json(history);
+        })
+        .catch(err => {
+            return res.send(err);
+        })
+    }
+    // else
+    // {
+    //     return res.status(401).send('Unauthorized');
+    // }
 });
 
 app.post('/api/history', passport.authenticate('jwt'), (req, res) => {

@@ -318,6 +318,34 @@ $(document).ready(function() {
             }
         })
     }
+    if (window.location.pathname == '/history') {
+        $.ajax({
+            url: `${API_URL}/history`,
+            type: 'GET',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
+            success: function(response) {
+                response.forEach(history => {
+                    $('#history').append(`
+                    <tr>
+                        <td>${history.details}</td>
+                        <td>${history.doctorsEmail}</td>
+                        <td>${history.patientsEmail}</td>
+                        <td>${history.notes}</td>
+                        <td>${history.date}</td>
+                    </tr>
+                    `)
+                })
+                console.log(response);
+            },
+            error: function(err) {
+                if(err.status == 401) {
+                    location.href = '/login';
+                }
+            }
+        })
+    }
 });
 
 function slotToTime(slot) {
