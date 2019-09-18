@@ -289,12 +289,17 @@ $(document).ready(function() {
                 'Authorization': `bearer ${sessionStorage.getItem('token')}`
             },
             success: function(response) {
-                response.forEach(users => {
+                response.forEach(paitents => {
                     $('#patients').append(`
                     <tr>
-                        <td>${users.name}</td>
-                        <td>${users.email}</td>
-                        <td>"Empty"</td>
+                        <td>${paitents.name}</td>
+                        <td>${paitents.email}</td>
+                        <td><div class="login3">
+                            <form method="post">
+                                <a href="/history" class="myButton3">Add</a>
+                            </form>
+                            </div>
+                        </td>
                     </tr>
                     `)
                 })

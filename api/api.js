@@ -240,10 +240,10 @@ app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
     if(req.user.userType != 'doctor') {
         return res.status(401).send('Unauthorized');
     }
-    User.find({doctors: req.user.id})
-        .then(users => {
-            console.log(users);
-            return res.json(users);            
+    Doctor.find({userID: req.user.id})
+        .then(user => {
+            console.log(user);
+            return res.json(user);            
         })
         .catch(err => {
             return res.send(err);

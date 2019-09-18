@@ -30,7 +30,6 @@ var UserSchema = new mongoose.Schema(
             default: Date.now
         },
         doctors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-
     });
 
 UserSchema.methods.isDoctor = function isDocotr() {
