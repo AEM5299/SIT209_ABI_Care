@@ -296,7 +296,13 @@ $(document).ready(function() {
                         <td>${paitents.email}</td>
                         <td><div class="login3">
                             <form method="post">
-                                <a href="/history" class="myButton3">Add</a>
+                                <a href="/history" class="myButton3">View</a>
+                            </form>
+                            </div>
+                        </td>
+                        <td><div class="login3">
+                            <form method="post">
+                                <a href="/historyadd" class="myButton3">Add</a>
                             </form>
                             </div>
                         </td>
@@ -382,6 +388,54 @@ $("#addDeviceForm").submit(function(event) {
         }
     });
 });
+
+function addHistory()
+{
+    //$("addHistoryForm").on('click', function(){
+        const details = $('#details').val();
+        const doctorsEmail = $('#doctorsEmail').val();
+        const patientsEmail = $('#patientsEmail').val();
+        const notes = $('#notes').val();
+        const date = $('#date').val();
+        
+        if(details == '' || doctorsEmail == '' || patientsEmail == '' || notes == '' || date =='')
+        {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Some fields are empty',
+            })
+            console.log("Some fields are empty");
+            return;
+        }
+    
+        $.ajax({
+            url: `${API_URL}/history`,
+            type: 'POST',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
+            data: {details, doctorsEmail, patientsEmail, notes, date},
+            success: function(response) {
+                console.log(response);
+                location.href = '/patients';
+            },
+            error: function(err) {
+                if(err.status == 401) {
+                    location.href = '/login';
+                } else {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: `${err.responseJSON.message}`,
+                    })
+                    console.log(err.responseJSON.message);
+                    console.log(err);
+                }
+            }
+        });
+    //})
+}
 
 // Loads footer.html using the footer id on division tag
 $('#footer').load('footer.html');

@@ -5,6 +5,7 @@ const User = require('./models/user');
 const Device = require('./models/device');
 const Doctor = require('./models/doctor');
 const Appointment = require('./models/appointment');
+const History = require('./models/history');
 // Importing what we use for encryption and authentication
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
@@ -236,11 +237,18 @@ app.get('/api/doctors', (req,res) => {
     })
 });
 
+app.get('/api/doctors/:doctorId', passport.authenticate('jwt'), (req, res) => {
+
+});
+
 app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
     if(req.user.userType != 'doctor') {
         return res.status(401).send('Unauthorized');
     }
     Doctor.find({userID: req.user.id})
+        .select({paitents:1})
+        .populate('paitents', 'name')
+        .populate('paitents', 'email')
         .then(user => {
             console.log(user);
             return res.json(user);            
@@ -249,6 +257,10 @@ app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
             return res.send(err);
         })
 })
+
+app.get('/api/patients/:patientId', passport.authenticate('jwt'), (req, res) => {
+
+});
 
 app.post('/api/appointment', passport.authenticate('jwt'), (req, res) => {
     const { date, slot, doctorid } = req.body;
@@ -287,6 +299,41 @@ app.get('/api/appointment', passport.authenticate('jwt'), (req, res) => {
         return res.send(err);
     })
 })
+
+app.get('/api/history', passport.authenticate('jwt'), (req, res) => {
+
+});
+
+app.post('/api/history', passport.authenticate('jwt'), (req, res) => {
+    if(req.user.userType != 'doctor') {
+        return res.status(401).send('Unauthorized');
+    }
+    const {details, doctorsEmail, patientsEmail, notes, date} = req.body;
+    User.find({email: patientsEmail})
+    .then(user => {
+        if(!user) return res.send('no such paitient exists');
+        const newHistory = new History({
+            details: details,
+            doctorsEmail: doctorsEmail,
+            patientsEmail: patientsEmail,
+            doctor: req.user.id,
+            patient: user._id,
+            notes: notes,
+            date: date
+        });
+        newHistory.save(err => {
+            return err
+                ? res.send(err)
+                : res.json({
+                    newDevice: newHistory,
+                    success: true
+                });
+        });
+    })
+    .catch(err => {
+        return res.send('failed');
+    });
+});
 
 app.get('*', (req, res) => {
     res.status(404).send("404 NOT FOUND");
