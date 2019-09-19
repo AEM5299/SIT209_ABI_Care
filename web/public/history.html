@@ -28,47 +28,36 @@
     </header>
 
     <body>
-        <div class="login3">
-            <h1 style="cursor: default">Add Medical Data</h1>
-        </div>
-        <table>
-            <tr>
-                <th width="200px">
-                    <form method="post">
-                        <input type="text" name="hista" placeholder="Details" required="required" />
-                    </form>
-                </th>
-                <th width="200px">
-                    <form method="post">
-                        <input type="text" name="histb" placeholder="Doctor" />
-                    </form>
-                </th>
-                <th width="200px">
-                    <form method="post">
-                        <input type="text" name="histc" placeholder="Notes" />
-                    </form>
-                </th>
-                <th width="200px">
-                    <form method="post">
-                        <input type="datetime" name="histd" placeholder="Date" required="required" />
-                    </form>
-                </th>
-                <th width="200px">
-                    <div class="login3">
-                        <form method="post">
-                            <a href="" class="myButton3">Add</a>
-                        </form>
-                    </div>
-                </th>
-            </tr>
-        </table>
-
-        <hr color="orange" width="80%">
-
         <div class="login3" style="padding-top:1%;">
             <h1 style="cursor: default">View Medical Data</h1>
         </div>
 
+        <table id="history">
+            <tr>
+                <th>Details</th>
+                <th>Doctor Email</th>
+                <th>Patient Email</th>
+                <th>Notes</th>
+                <th>Date</th>
+            </tr>
+        </table>
     </body>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 15px;
+            border-width: thick;
+            border-color: white;
+            color: white;
+        }
+        table {
+            border-spacing: 5px;
+            border-width: thick;
+            border-color: white;
+        }
+    </style>
 
 </html>

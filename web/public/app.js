@@ -5,7 +5,7 @@ const token = sessionStorage.getItem('token');
 // Stores the api url hosted using now
 const API_URL = "https://abi-care-api.herokuapp.com/api";
 // Stores the mqtt url hosted using now
-//const MQTT_URL = "";
+const MQTT_URL = "http://localhost:5000/mqtt";
 
 $('#register').on('click', function ()
 {
@@ -77,7 +77,6 @@ $('#register').on('click', function ()
         console.log("Something went wrong");
     }
 });
-
 
 $('#registerDoctor').on('click', function ()
 {
@@ -282,6 +281,71 @@ $(document).ready(function() {
             }
         });
     }
+    if (window.location.pathname == '/patients') {
+        $.ajax({
+            url: `${API_URL}/patients`,
+            type: 'GET',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
+            success: function(response) {
+                response.forEach(paitents => {
+                    $('#patients').append(`
+                    <tr>
+                        <td>${paitents.name}</td>
+                        <td>${paitents.email}</td>
+                        <td><div class="login3">
+                            <form method="post">
+                                <a href="/history" class="myButton3">View</a>
+                            </form>
+                            </div>
+                        </td>
+                        <td><div class="login3">
+                            <form method="post">
+                                <a href="/historyadd" class="myButton3">Add</a>
+                            </form>
+                            </div>
+                        </td>
+                    </tr>
+                    `)
+                })
+                console.log(response);
+            },
+            error: function(err) {
+                if(err.status == 401) {
+                    location.href = '/login';
+                }
+            }
+        })
+    }
+    if (window.location.pathname == '/history') {
+        $.ajax({
+            url: `${API_URL}/history`,
+            type: 'GET',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
+            success: function(response) {
+                response.forEach(history => {
+                    $('#history').append(`
+                    <tr>
+                        <td>${history.details}</td>
+                        <td>${history.doctorsEmail}</td>
+                        <td>${history.patientsEmail}</td>
+                        <td>${history.notes}</td>
+                        <td>${history.date}</td>
+                    </tr>
+                    `)
+                })
+                console.log(response);
+            },
+            error: function(err) {
+                if(err.status == 401) {
+                    location.href = '/login';
+                }
+            }
+        })
+    }
 });
 
 function slotToTime(slot) {
@@ -353,6 +417,53 @@ $("#addDeviceForm").submit(function(event) {
     });
 });
 
+function addHistory()
+{
+    //$("addHistoryForm").on('click', function(){
+        const details = $('#details').val();
+        const doctorsEmail = $('#doctorsEmail').val();
+        const patientsEmail = $('#patientsEmail').val();
+        const notes = $('#notes').val();
+        const date = $('#date').val();
+        
+        if(details == '' || doctorsEmail == '' || patientsEmail == '' || notes == '' || date =='')
+        {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Some fields are empty',
+            })
+            console.log("Some fields are empty");
+            return;
+        }
+    
+        $.ajax({
+            url: `${API_URL}/history`,
+            type: 'POST',
+            headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            },
+            data: {details, doctorsEmail, patientsEmail, notes, date},
+            success: function(response) {
+                console.log(response);
+                location.href = '/patients';
+            },
+            error: function(err) {
+                if(err.status == 401) {
+                    location.href = '/login';
+                } else {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: `${err.responseJSON.message}`,
+                    })
+                    console.log(err.responseJSON.message);
+                    console.log(err);
+                }
+            }
+        });
+    //})
+}
 
 // Loads footer.html using the footer id on division tag
 $('#footer').load('footer.html');
