@@ -2,21 +2,13 @@ const mongoose = require('mongoose');
 
 module.exports = mongoose.model('History', new mongoose.Schema(
     {
-        details: 
+        details:
         {
             type: String,
             default:"Details about this entry"
         },
-        patient: {type: mongoose.Schema.Types.ObjectId, ref:"User"},
-        doctor: {type: mongoose.Schema.Types.ObjectId, ref:"User"},
-        doctorsEmail:
-        {
-            type: String
-        },
-        patientsEmail:
-        {
-            type: String
-        },
+        patient: {type: mongoose.Schema.Types.ObjectId, ref:"User", required: true},
+        doctor: {type: mongoose.Schema.Types.ObjectId, ref:"User", required: true},
         notes:
         {
             type: String,

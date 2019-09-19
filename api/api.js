@@ -16,8 +16,19 @@ const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
+const mailer = require('nodemailer');
+
 // Connecting to mongoDB
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
+const transporter = mailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS
+    }
+});
 // Creating an instance of express() named app
 const app = express();
 
@@ -90,6 +101,23 @@ passport.deserializeUser((id, done) => {
       done(err, user);
     });
 });
+
+async function sendNotification(appointment) {
+    Appointment.findById(appointment._id)
+    .populate('patient', 'name email')
+    .populate('doctor', 'name email')
+    .then(appointment => {
+        transporter.sendMail({
+            from: '"ABI Care" <ABICare@example.com>',
+            to: appointment.patient.email,
+            subject: `Your appointment with Dr. ${appointment.doctor.name}`,
+            text: `Hi, You have a new appointment with Dr. ${appointment.doctor.name} on ${appointment.date.toString().slice(0, 15)}.`,
+            html: `Hi,<br><br>You have a new appointment with Dr. ${appointment.doctor.name} on ${appointment.date.toString().slice(0, 15)}.<br><br> Thankyou,<br>ABI Care`
+        }, err => {
+            if(err) console.log(err);
+        });
+    })
+}
 
 // api end points start
 
@@ -237,28 +265,25 @@ app.get('/api/doctors', (req,res) => {
     })
 });
 
-// app.get('/api/doctors/:doctorId', passport.authenticate('jwt'), (req, res) => {
-// });
-
 app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
     if(req.user.userType != 'doctor') {
         return res.status(401).send('Unauthorized');
     }
     Doctor.find({userID: req.user.id})
         .select({paitents:1})
-        .populate('paitents', 'name')
-        .populate('paitents', 'email')
+        .populate('paitents', 'name email')
         .then(user => {
             console.log(user);
-            return res.json(user);            
+            return res.json(user);
         })
         .catch(err => {
             return res.send(err);
         })
 })
 
-// app.get('/api/patients/:patientId', passport.authenticate('jwt'), (req, res) => {
-// });
+app.get('/api/patients/:patientId', passport.authenticate('jwt'), (req, res) => {
+    res.send('Not Implemented Yet');
+});
 
 app.post('/api/appointment', passport.authenticate('jwt'), (req, res) => {
     const { date, slot, doctorid } = req.body;
@@ -274,7 +299,10 @@ app.post('/api/appointment', passport.authenticate('jwt'), (req, res) => {
             })
             newAppointment.save((err, result) => {
                 if(err) return res.send(err);
-                else return res.send('Appointment made');
+                else {
+                    res.send('Appointment made');
+                    return sendNotification(result);
+                }
             })
         }
     })
@@ -319,25 +347,20 @@ app.get('/api/history', passport.authenticate('jwt'), (req, res) => {
             return res.send(err);
         })
     }
-    // else
-    // {
-    //     return res.status(401).send('Unauthorized');
-    // }
 });
 
 app.post('/api/history', passport.authenticate('jwt'), (req, res) => {
     if(req.user.userType != 'doctor') {
         return res.status(401).send('Unauthorized');
     }
-    const {details, doctorsEmail, patientsEmail, notes, date} = req.body;
-    User.find({email: patientsEmail})
+    const {details, notes, date, patientid} = req.body;
+    User.find({email: null})
     .then(user => {
         if(!user) return res.send('no such paitient exists');
         const newHistory = new History({
             details: details,
-            doctorsEmail: doctorsEmail,
-            patientsEmail: patientsEmail,
             doctor: req.user.id,
+            patient: patientid,
             patient: user._id,
             notes: notes,
             date: date
