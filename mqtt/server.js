@@ -86,7 +86,7 @@ client.on('message', (topic, message) => {
 		Device.findById(data.deviceId, (err, device) => {
 			if(err) console.log(err);
 			if(!device) return;
-			const date = Date();
+			const date = new Date();
 			if(data.type == 'BPM') {
 				console.log('1');
 				const {high, low} = data;
@@ -96,13 +96,13 @@ client.on('message', (topic, message) => {
 						sendWarningEmail(email, 'Your blood pressure was too high' ,`Your Blood Pressure reading at ${date.toString()} was too high (${high}/${low}). Please consult a doctor.`)
 					});
 				}
-				const array = [date.now, high, low];
+				const array = [date.getTime(), high, low];
 				device.data.push(array);
 			}
 			if(data.type == 'HRM') {
 				console.log('2');
 				const {rate} = data;
-				const array = [date.now, rate];
+				const array = [date.getTime(), rate];
 				device.data.push(array);
 			}
 			if(data.type == 'SLM') {
@@ -114,7 +114,7 @@ client.on('message', (topic, message) => {
 						sendWarningEmail(email, 'Your glucose level was too high' ,`Your Sugar level reading at ${date.toString()} was too high (${level}). Please consult a doctor.`)
 					});
 				}
-				const array = [date.now, level];
+				const array = [date.getTime(), level];
 				device.data.push(array);
 			}
 			device.save(err => {
