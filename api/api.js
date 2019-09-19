@@ -29,7 +29,7 @@ const transporter = mailer.createTransport({
         pass: process.env.MAILTRAP_PASS
     }
 });
-// Creating an instance of express() named app
+// Creating an instance of express named app
 const app = express();
 
 // Middleware for bodyparser
@@ -120,7 +120,6 @@ async function sendNotification(appointment) {
 }
 
 // api end points start
-
 app.post('/api/registration', (req, res) => {
     const { name, email, password, usertype } = req.body;
     const {streetaddress, city, state, postcode} = req.body;
@@ -250,7 +249,6 @@ app.get('/api/devices/:deviceId', passport.authenticate('jwt'), (req, res) => {
         .catch(err => {
             return res.send(err);
         })
-
 });
 
 app.get('/api/doctors', (req,res) => {
@@ -271,10 +269,10 @@ app.get('/api/patients', passport.authenticate('jwt'), (req,res) => {
     }
     Doctor.find({userID: req.user.id})
         .select({paitents:1})
-        .populate('paitents', 'name email')
-        .then(user => {
-            console.log(user);
-            return res.json(user);
+        .populate('patients', 'name email')
+        .then(patients => {
+            console.log(patients);
+            return res.json(patients);
         })
         .catch(err => {
             return res.send(err);
@@ -337,7 +335,7 @@ app.get('/api/history', passport.authenticate('jwt'), (req, res) => {
             return res.send(err);
         })
     }
-    if(req.user.userType == 'patient')
+    else if(req.user.userType == 'patient')
     {
         History.find({patient: req.user.id})
         .then(history =>{
@@ -356,12 +354,11 @@ app.post('/api/history', passport.authenticate('jwt'), (req, res) => {
     const {details, notes, date, patientid} = req.body;
     User.find({email: null})
     .then(user => {
-        if(!user) return res.send('no such paitient exists');
+        if(!user) return res.send('no such patient exists');
         const newHistory = new History({
             details: details,
             doctor: req.user.id,
             patient: patientid,
-            patient: user._id,
             notes: notes,
             date: date
         });

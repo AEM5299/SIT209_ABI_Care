@@ -1,11 +1,11 @@
 // Loads navbar.html using the navbar id on division tag
 $('#navbar').load('navbar.html');
+// Loads footer.html using the footer id on division tag
+$('#footer').load('footer.html');
 
 const token = sessionStorage.getItem('token');
 // Stores the api url hosted using now
 const API_URL = "http://localhost:5000/api";
-// Stores the mqtt url hosted using now
-const MQTT_URL = "http://localhost:5000/mqtt";
 
 $('#register').on('click', function ()
 {
@@ -45,7 +45,6 @@ $('#register').on('click', function ()
         console.log("Password length is less than 6 characters");
         return;
     }
-    // was redirecting to login page even when no passwords were entered
     if (password == confirmpassword && password != null && confirmpassword != null)
     {
         console.log("Passwords are the same, sending request to the api")
@@ -425,7 +424,7 @@ function addHistory()
         const patientsEmail = $('#patientsEmail').val();
         const notes = $('#notes').val();
         const date = $('#date').val();
-        
+
         if(details == '' || doctorsEmail == '' || patientsEmail == '' || notes == '' || date =='')
         {
             Swal.fire({
@@ -436,7 +435,7 @@ function addHistory()
             console.log("Some fields are empty");
             return;
         }
-    
+
         $.ajax({
             url: `${API_URL}/history`,
             type: 'POST',
@@ -464,6 +463,3 @@ function addHistory()
         });
     //})
 }
-
-// Loads footer.html using the footer id on division tag
-$('#footer').load('footer.html');
