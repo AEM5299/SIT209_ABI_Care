@@ -34,6 +34,10 @@ app.get('/history', (req, res) => {
     res.sendFile(`${base}/history.html`);
 });
 
+app.get('/historyadd', (req, res) => {
+    res.sendFile(`${base}/history_add.html`);
+});
+
 app.get('/devices', (req, res) => {
     res.sendFile(`${base}/devices.html`);
 });
