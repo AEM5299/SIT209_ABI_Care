@@ -1,0 +1,76 @@
+<!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="mobilestylenavbar.css" />
+
+<!-- Top Navigation Menu -->
+<div class="topnav">
+    <a href="/home" class="active">ABI CARE</a>
+    <!-- Navigation links (hidden by default) -->
+    <div id="myLinks">
+        <a id="menu1m" href="#" style="display: none;">Devices</a>
+        <a id="menu2m" href="#" style="display: none;">History</a>
+        <a id="menu3m" href="#" style="display: none;">Medical</a>
+        <a id="menu4m" href="#" style="display: none;">Doctors</a>
+        <a id="authm" href="#"></a>
+    </div>
+    <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+    <a href="javascript:void(0);" class="icon" onclick="toggle()">
+        <i class="fa fa-bars"></i>
+    </a>
+</div>
+
+<script>
+    const isAuthenticatedMobile = sessionStorage.getItem('token');
+    const elementm = document.getElementById('authm');
+    const menu1m = document.getElementById('menu1m');
+    const menu2m = document.getElementById('menu2m');
+    const menu3m = document.getElementById('menu3m');
+    const menu4m = document.getElementById('menu4m');
+
+    if (isAuthenticatedMobile) {
+        elementm.innerHTML = 'Logout';
+        elementm.onclick = (event) => {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('usertype');
+            location.href = '/login';
+        }
+        const UserType = sessionStorage.getItem('usertype');
+        if (UserType == 'patient') {
+            menu1m.innerHTML = 'Devices';
+            menu1m.href = '/devices';
+            menu2m.innerHTML = 'History';
+            menu2m.href = '/history';
+            menu3m.innerHTML = 'Medical';
+            menu4m.innerHTML = 'Doctors';
+            menu4m.href = '/doctors';
+            menu1m.style.display = "contents";
+            menu2m.style.display = "contents";
+            menu3m.style.display = "contents";
+            menu4m.style.display = "contents";
+        } else if (UserType == 'doctor') {
+            menu4m.innerHTML = 'Patients';
+            menu4m.href = '/patients';
+            menu3m.innerHTML = 'Appointments';
+            menu3m.href = '/appointments';
+            menu4m.style.display = "contents";
+            menu3m.style.display = "contents";
+        }
+    } else {
+        elementm.innerHTML = 'Login';
+        elementm.href = '/login';
+        menu1m.style.display = "none";
+        menu2m.style.display = "none";
+        menu3m.style.display = "none";
+        menu4m.style.display = "none";
+    }
+
+    /* Toggle between showing and hiding the navigation menu links when the user clicks on the hamburger menu / bar icon */
+    function toggle() {
+        var x = document.getElementById("myLinks");
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        } else {
+            x.style.display = "block";
+        }
+    }
+</script>

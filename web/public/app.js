@@ -1,5 +1,11 @@
 // Loads navbar.html using the navbar id on division tag
-$('#navbar').load('navbar.html');
+const state = window.matchMedia("(max-width: 768px)").matches;
+if (!state) {
+    $('#navbar').load('navbar.html');
+} else {
+    $('#navbar').load('mobile_navbar.html');
+}
+
 // Loads footer.html using the footer id on division tag
 $('#footer').load('footer.html');
 
