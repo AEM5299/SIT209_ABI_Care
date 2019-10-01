@@ -5,11 +5,13 @@
   "main": "api.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config api.js"
+    "start": "nodemon -r dotenv/config api.js",
+    "doc": "apidoc -o public/generated-docs/ -e node_modules/"
   },
   "author": "Abood, Brian, Idhant",
   "license": "ISC",
   "dependencies": {
+    "apidoc": "^0.17.7",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",

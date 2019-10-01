@@ -1,0 +1,7 @@
+{
+    "name": "abi-care-api",
+    "version": "1.0.0",
+    "description": "List of endpoints for the abi-care-api",
+    "title": "ABI-Care API",
+    "url": "https://abi-care-api.herokuapp.com"
+   }
